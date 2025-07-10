@@ -73,7 +73,7 @@ const NavBar = () => {
 
         <div className="flex items-center gap-2">
           <NavLink to="/home" className="flex items-center gap-2">
-            <img src="./bloodIcon.ico" alt="img" className="h-8 w-8" />
+            <img src="/bloodIcon.ico" alt="img" className="h-8 w-8" />
             <span className="font-semibold text-[17px] text-white">RedBridge</span>
           </NavLink>
         </div>

@@ -5,7 +5,7 @@ const WhyUse = () => {
     <>
    <section className="flex flex-col md:flex-row justify-center items-center px-4 py-12 mt-15 mb-7 gap-10">
       
-      <div className="bg-white shadow-lg rounded-xl p-8 max-w-xl transition duration-300 hover:shadow-red-200 ">
+      <div className="bg-white shadow-lg rounded-xl p-8 max-w-xl transition duration-300  ">
         <h1 className="text-2xl mb-4 font-bold text-red-900">
           Why to use Red Bridge?
         </h1>
