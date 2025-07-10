@@ -1,46 +1,4 @@
-// import React from 'react'
-// import { NavLink } from "react-router-dom";
 
-// const NavBar = () => {
-
-//   return (
-//     <>
-//        <nav className="fixed top-0 left-0 w-full z-50 bg-blue-950 text-white text-[15px] px-6 py-4 flex flex-wrap items-center justify-between shadow-md">
-
-//        <div className='flex'>
-//         <img src='./bloodIcon.ico' alt="img" className='h-8 w-8  flex justify-center '/>
-//         <div className=" text-white font-semibold flex align-middle items-center text-[17px]">RedBridge</div>
-//         </div>
-
-//         <ul className="flex gap-[30px]" >
-//           <li><NavLink to={"/home"} className="hover:text-cyan-500 transition-colors">Home</NavLink></li>
-//           <li><NavLink to={"/about"} className="hover:text-cyan-500 transition-colors">About Us</NavLink></li>
-//           <li><NavLink to={"/contactus"} className="hover:text-cyan-500 transition-colors">Contact Us</NavLink></li>
-//           <li><NavLink to={"/faqs"} className="hover:text-cyan-500 transition-colors">FAQs</NavLink></li>
-//           <li><NavLink to={"/faqs"} className="hover:text-cyan-500 transition-colors">Blood Info</NavLink></li>
-//         </ul>
-
-
-//         <div className="  ">
-
-//           <button className=" w-30 h-10 rounded-2xl  outline-0 outline-white bg-white text-black "> <NavLink to={"/login"} className="hover:text-cyan-500 transition-colors"> Log In </NavLink></button>
-
-
-//         </div>
-//       </nav>
-
-//       <main>
-
-//       </main>
-//       {/* 
-//       <footer className="bg-gray-100 py-4">
-
-//       </footer> */}
-//     </>
-//   );
-// };
-
-// export default NavBar
 
 
 
@@ -90,7 +48,6 @@ const NavBar = () => {
           </label>
         </button>
 
-        {/* Desktop Menu */}
         <ul className="hidden md:flex gap-8 items-center text-[16px]">
           
           <li><NavLink to="/home" className="hover:text-cyan-500">Home</NavLink></li>
@@ -111,7 +68,7 @@ const NavBar = () => {
               <ul className="absolute top-8 left-0 bg-blue-950 text-white w-56 py-2 px-3 rounded-md shadow-lg z-50">
                 <li className="py-1">
                   <NavLink
-                    to="/bloodinfo/basics"
+                    to="/info/bloodbasics"
                     onClick={() => setBloodInfoOpen(false)}
                     className="block hover:text-cyan-500"
                   >
@@ -156,7 +113,7 @@ const NavBar = () => {
             {bloodInfoOpen && (
               <ul className="ml-4 mt-2 flex flex-col gap-2">
                 <li>
-                  <NavLink to="/bloodinfo/basics" onClick={() => setBloodInfoOpen(false)} className="hover:text-cyan-500">Blood Basics</NavLink>
+                  <NavLink to="/info/bloodbasics" onClick={() => setBloodInfoOpen(false)} className="hover:text-cyan-500">Blood Basics</NavLink>
                 </li>
                 <li>
                   <NavLink to="/info/bloodbank" onClick={() => setBloodInfoOpen(false)} className="hover:text-cyan-500">Blood Bank Information</NavLink>

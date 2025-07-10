@@ -3,7 +3,7 @@ import React from 'react'
 const WhyUse = () => {
   return (
     <>
-   <section className="flex flex-col md:flex-row justify-center items-center px-4 py-12 mt-15 mb-7 gap-10">
+   <section className="flex flex-col md:flex-row justify-center bg-gray-50 items-center px-4 py-12 mt-15 mb-7 gap-10">
       
       <div className="bg-white shadow-lg rounded-xl p-8 max-w-xl transition duration-300  ">
         <h1 className="text-2xl mb-4 font-bold text-red-900">
@@ -19,7 +19,7 @@ const WhyUse = () => {
     
       <div className="w-[400px] md:w-[400px] transition duration-300 hover:shadow-red-500">
         <img
-          src="./src/assets/img/pexels-photo-4531306.webp"
+          src="./src/assets/img/whyuse.jpg"
           alt="Blood donation"
           className="shadow-lg rounded-xl w-auto h-auto "
         />

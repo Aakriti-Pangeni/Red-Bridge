@@ -1,223 +1,226 @@
-import React from 'react'
-import { useState } from 'react'
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const RegisterDonor = () => {
+  const [formData, setFormData] = useState({
+    name: '',
+    contact: '',
+    email: '',
+    dateOfBirth: '',
+    gender: '',
+    bloodGroup: '',
+    location: '',
+    password: '',
+    confirmPassword: '',
+  });
 
-    const [formData, setFormData] = useState({
-        name: '',
-        contact: '',
-        email: '',
-        dateOfBirth: '',
-        gender: '',
-        bloodGroup: '',
-        location: '',
-        password: '',
-        confirmPassword: '',
+  const [errors, setErrors] = useState({});
+  const navigate = useNavigate();
 
-    })
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
-    const [errors, setErrors] = useState({})
-    const [isSubmitting, setIsSubmitting] = useState(false);
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData((prv) => ({
-            ...prv,
-            [name]: value,
-        })
-        )
-    }
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-
-        setIsSubmitting(true);
-
-        try {
-            await new Promise((res) => setTimeout(res, 1500));
-            alert('Message sent successfully');
-            setFormData({
-                name: '',
-                contact: '',
-                email: '',
-                dateOfBirth: '',
-                gender: '',
-                bloodGroup: '',
-                location: '',
-                password: '',
-                confirmPassword: '',
-            });
-            setErrors({});
-        } catch (err) {
-            setErrors({ submit: 'An unexpected error occurred' });
-        } finally {
-            setIsSubmitting(false);
-        }
-
-    };
-
-
-    return (
-        <>
-            <section className='w-full flex flex-col  p-7  justify-center items-center bg-gray-200 '>
-                
-                
-              
-                <div className="bg-white shadow-md rounded-lg px-8 py-5 w-full max-w-md ">
-                {errors.submit && <div className="text-red-600 mb-4 text-sm">{errors.submit}</div>}
-                <form onSubmit={handleSubmit} className="space-y-5">
-                     <h1 className='flex justify-center text-red-900 text-xl font-bold '>Donor Registration Form</h1>
-
-                    <div className='flex flex-col' >
-                            <label className='block text-sm font-medium mb-0.5'>Full Name:</label>
-                            <input
-                                type="text"
-                                name="name"
-                                placeholder="Enter your Full Name"
-                                className="w-full border border-gray-300 rounded px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-50"
-                                value={formData.name}
-                                onChange={handleChange}
-                                required
-                            />
-                        </div>
-
-                        <div className='flex flex-col'>
-                            <label className='block text-sm font-medium mb-0.5'>Contact:</label>
-                            <input
-                                type="tel"
-                                name="contact"
-                                placeholder="Enter your contact"
-                                className="w-full border border-gray-300 rounded px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-50"
-                                value={formData.contact}
-                                onChange={handleChange}
-                                required
-                            />
-                        </div>
-
-                        <div className='flex flex-col'>
-                            <label className='block text-sm font-medium mb-0.5'>Email:</label>
-                            <input
-                                type="email"
-                                name="email"
-                                placeholder="Enter your Email"
-                                className="w-full border border-gray-300 rounded px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-50"
-                                value={formData.email}
-                                onChange={handleChange}
-                                required
-                            />
-                        </div>
-
-
-                        <div className='flex flex-col'>
-                            <label className='block text-sm font-medium mb-0.5'>Date Of Birth:</label>
-                            <input
-                                type="date"
-                                name="dateOfBirth"
-                                placeholder="Enter your date of birth"
-                                className="w-full border border-gray-300 rounded px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-50"
-                                value={formData.dateOfBirth}
-                                onChange={handleChange}
-                                required
-                            />
-                        </div>
-
-                        <div className='flex gap-16'>
-                            <div className='flex flex-col'>
-                            <label htmlFor="gender" className="block text-sm font-medium mb-0.5">Gender:</label>
-                            <select 
-                            id="gender"
-                            name="gender"
-                            className=" w-full border border-gray-300 rounded px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-50" 
-                             value={formData.gender}
-                              onChange={handleChange}
-                              required >
-                              <option value="">Select Gender</option>
-                                <option value='Male'>Male</option>
-                                <option value='Female'>Female</option>
-                                <option value='Others'>Others</option>
-                            </select>
-                            </div>
-                            
-                            <div className='flex flex-col'>
-                            <label htmlFor="bloodGroup" className="block text-sm font-medium mb-0.5">Blood Group:</label>
-                            <select 
-                            id="bloodGroup"
-                            name="bloodGroup"
-                            className="w-full border border-gray-300 rounded px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-50"
-                              value={formData.bloodGroup}
-                              onChange={handleChange}
-                               required >
-                                <option value="">Select Blood Group</option>
-                                <option value='A+'>A+</option>
-                                <option value='A-'>A-</option>
-                                <option value='B+'>B+</option>
-                                <option value='B-'>B-</option>
-                                <option value='AB+'>AB+</option>
-                                <option value='AB-'>AB-</option>
-                                <option value='O+'>O+</option>
-                                <option value='O-'>O-</option>
-                            </select>
-                            </div>
-                        </div>
-
-                        <div className='flex flex-col'>
-                            <label className='block text-sm font-medium mb-0.5'>Location(District/City):</label>
-                            <input
-                                type="text"
-                                name="location"
-                                placeholder="Enter your District/City"
-                                className="w-full border border-gray-300 rounded px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-50"
-                                value={formData.location}
-                                onChange={handleChange}
-                                required
-                            />
-                        </div>
-
-
-                        <div className='flex flex-col'>
-                            <label className='block text-sm font-medium mb-0.5'>Create Password:</label>
-                            <input
-                                type="password"
-                                name="password"
-                                placeholder="Enter your password"
-                                className="w-full border border-gray-300 rounded px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-50"
-                                value={formData.password}
-                                onChange={handleChange}
-                                required
-                            />
-                        </div>
-
-                        <div className='flex flex-col'>
-                            <label className='block text-sm font-medium mb-0.5'>Confirm Password:</label>
-                            <input
-                                type="password"
-                                name="confirmPassword"
-                                placeholder="Confirm your password"
-                                className="w-full border border-gray-300 rounded px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-50" 
-                                value={formData.confirmPassword}
-                                onChange={handleChange}
-                                required
-                            />
-                        </div>
-                    
-                    <div className='flex justify-center'  > 
-                    <button
-                        type="submit"
-                        className="h-9 w-56 mt-3 bg-[#660000] hover:bg-[#800000] text-white font-medium py-2 rounded-2xl"
-                        disabled={isSubmitting}
-                    >
-                        {isSubmitting ? 'submitting...' : 'Submit'}
-
-                    </button>
-                    </div>
-                </form>
-
-            </div>
-            </section>
-        </>
+  const validate = () => {
+    const newErrors = {};
+    if (formData.name.trim().length < 4) newErrors.name = 'Name must be at least 4 characters';
+    if (!/^\d{10}$/.test(formData.contact)) newErrors.contact = 'Contact must be exactly 10 digits';
+    if (!/^\S+@\S+\.\S+$/.test(formData.email)) newErrors.email = 'Invalid email format';
+    if (!formData.dateOfBirth) newErrors.dateOfBirth = 'Date of birth is required';
+    if (!formData.gender) newErrors.gender = 'Please select gender';
+    if (!formData.bloodGroup) newErrors.bloodGroup = 'Please select blood group';
+    if (!formData.location.trim()) newErrors.location = 'Location is required';
+    if (
+      !/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(formData.password)
     )
-}
+      newErrors.password =
+        'Password must be at least 8 characters and include letters and numbers';
+    if (formData.password !== formData.confirmPassword)
+      newErrors.confirmPassword = 'Passwords do not match';
 
+    return newErrors;
+  };
 
-export default RegisterDonor
+  const handleSubmit = (e) => {
+    event.preventDefault();
+    const validationErrors = validate();
+    setErrors(validationErrors);
+
+    if (Object.keys(validationErrors).length === 0) {
+    //   alert('Registration successful!');
+      navigate('/checklist');
+    }
+  };
+
+  return (
+    <section className='w-full flex flex-col p-7 justify-center items-center bg-gray-200 '>
+      <div className="bg-white shadow-md rounded-lg px-8 py-5 w-full max-w-md ">
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <h1 className='flex justify-center text-red-900 text-xl font-bold'>
+            Donor Registration Form
+          </h1>
+
+          <div className='flex flex-col'>
+            <label className='block text-sm font-medium mb-0.5'>Full Name:</label>
+            <input
+              type="text"
+              name="name"
+              placeholder="Enter your Full Name"
+              className="w-full border border-gray-300 rounded px-4 py-2 text-sm"
+              value={formData.name}
+              onChange={handleChange}
+              required
+            />
+            {errors.name && <span className="text-red-600 text-xs">{errors.name}</span>}
+          </div>
+
+          
+          <div className='flex flex-col'>
+            <label className='block text-sm font-medium mb-0.5'>Contact:</label>
+            <input
+              type="tel"
+              name="contact"
+              placeholder="Enter your contact"
+              className="w-full border border-gray-300 rounded px-4 py-2 text-sm"
+              value={formData.contact}
+              onChange={handleChange}
+              required
+            />
+            {errors.contact && <span className="text-red-600 text-xs">{errors.contact}</span>}
+          </div>
+
+          
+          <div className='flex flex-col'>
+            <label className='block text-sm font-medium mb-0.5'>Email:</label>
+            <input
+              type="email"
+              name="email"
+              placeholder="Enter your Email"
+              className="w-full border border-gray-300 rounded px-4 py-2 text-sm"
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
+            {errors.email && <span className="text-red-600 text-xs">{errors.email}</span>}
+          </div>
+
+          <div className='flex flex-col'>
+            <label className='block text-sm font-medium mb-0.5'>Date Of Birth:</label>
+            <input
+              type="date"
+              name="dateOfBirth"
+              className="w-full border border-gray-300 rounded px-4 py-2 text-sm"
+              value={formData.dateOfBirth}
+              onChange={handleChange}
+              required
+            />
+            {errors.dateOfBirth && <span className="text-red-600 text-xs">{errors.dateOfBirth}</span>}
+          </div>
+
+          <div className='flex gap-16'>
+            <div className='flex flex-col'>
+              <label htmlFor="gender" className="block text-sm font-medium mb-0.5">Gender:</label>
+              <select
+                id="gender"
+                name="gender"
+                className="w-full border border-gray-300 rounded px-4 py-2 text-sm"
+                value={formData.gender}
+                onChange={handleChange}
+                required
+              >
+                <option value="">Select Gender</option>
+                <option value='Male'>Male</option>
+                <option value='Female'>Female</option>
+                <option value='Others'>Others</option>
+              </select>
+              {errors.gender && <span className="text-red-600 text-xs">{errors.gender}</span>}
+            </div>
+
+            <div className='flex flex-col'>
+              <label htmlFor="bloodGroup" className="block text-sm font-medium mb-0.5">Blood Group:</label>
+              <select
+                id="bloodGroup"
+                name="bloodGroup"
+                className="w-full border border-gray-300 rounded px-4 py-2 text-sm"
+                value={formData.bloodGroup}
+                onChange={handleChange}
+                required
+              >
+                <option value="">Select Blood Group</option>
+                <option value='A+'>A+</option>
+                <option value='A-'>A-</option>
+                <option value='B+'>B+</option>
+                <option value='B-'>B-</option>
+                <option value='AB+'>AB+</option>
+                <option value='AB-'>AB-</option>
+                <option value='O+'>O+</option>
+                <option value='O-'>O-</option>
+              </select>
+              {errors.bloodGroup && <span className="text-red-600 text-xs">{errors.bloodGroup}</span>}
+            </div>
+          </div>
+
+          <div className='flex flex-col'>
+            <label className='block text-sm font-medium mb-0.5'>Location (District/City):</label>
+            <input
+              type="text"
+              name="location"
+              placeholder="Enter your District/City"
+              className="w-full border border-gray-300 rounded px-4 py-2 text-sm"
+              value={formData.location}
+              onChange={handleChange}
+              required
+            />
+            {errors.location && <span className="text-red-600 text-xs">{errors.location}</span>}
+          </div>
+
+         
+          <div className='flex flex-col'>
+            <label className='block text-sm font-medium mb-0.5'>Create Password:</label>
+            <input
+              type="password"
+              name="password"
+              placeholder="Enter your password"
+              className="w-full border border-gray-300 rounded px-4 py-2 text-sm"
+              value={formData.password}
+              onChange={handleChange}
+              required
+            />
+            {errors.password && <span className="text-red-600 text-xs">{errors.password}</span>}
+          </div>
+
+          
+          <div className='flex flex-col'>
+            <label className='block text-sm font-medium mb-0.5'>Confirm Password:</label>
+            <input
+              type="password"
+              name="confirmPassword"
+              placeholder="Confirm your password"
+              className="w-full border border-gray-300 rounded px-4 py-2 text-sm"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              required
+            />
+            {errors.confirmPassword && <span className="text-red-600 text-xs">{errors.confirmPassword}</span>}
+          </div>
+
+         
+          <div className='flex justify-center'>
+            <button
+              type="submit"
+              className="h-9 w-56 mt-3 bg-[#660000] hover:bg-[#800000] text-white font-medium py-2 rounded-2xl"
+            >
+              Submit
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+  );
+};
+
+export default RegisterDonor;

@@ -6,7 +6,7 @@ const Welcome = () => {
     <>
       <section className="relative pt-10">
   <img
-    src="./src/assets/img/photo_2025-06-15_11-29-26.jpg"
+    src="./src/assets/img/welcome.jpg"
     className="w-full h-120 opacity-65"
     alt="Welcome Banner"
   />

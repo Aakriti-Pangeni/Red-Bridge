@@ -25,7 +25,7 @@ const About = () => {
 
         <div className="w-full h-full flex items-center justify-center">
           <img
-            src="./src/assets/img/pexels-rsapmech-13072338.jpg"
+            src="./src/assets/img/about.jpg"
             alt="Illustration of blood donation"
             className="w-full h-auto max-h-96 object-cover rounded-2xl shadow-md"
           />
