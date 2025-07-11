@@ -7,7 +7,7 @@ const DashboardPage = () => {
     {
       title: 'Total Donors',
       value: '1,234',
-      change: '+12.5%',
+      // change: '+12.5%',
       trend: 'up',
       icon: Users,
       color: 'bg-blue-600'
@@ -15,7 +15,7 @@ const DashboardPage = () => {
     {
       title: 'Active Requests',
       value: '87',
-      change: '+8.2%',
+      // change: '+8.2%',
       trend: 'up',
       icon: Activity,
       color: 'bg-red-600'
@@ -23,7 +23,7 @@ const DashboardPage = () => {
     {
       title: 'Successful Matches',
       value: '456',
-      change: '+15.3%',
+      // change: '+15.3%',
       trend: 'up',
       icon: CheckCircle,
       color: 'bg-green-600'
@@ -31,7 +31,7 @@ const DashboardPage = () => {
     {
       title: 'Pending Requests',
       value: '23',
-      change: '-5.1%',
+      // change: '-5.1%',
       trend: 'down',
       icon: Clock,
       color: 'bg-yellow-600'
@@ -47,16 +47,15 @@ const DashboardPage = () => {
 
   return (
     <div className="space-y-6">
-      {/* Stats Cards */}
+     
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {statsCards.map((card, index) => (
           <StatsCard key={index} {...card} />
         ))}
       </div>
 
-      {/* Recent Requests and Activity */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Recent Blood Requests */}
+        
         <div className="bg-slate-800 rounded-lg shadow-sm p-6 border border-slate-700">
           <h3 className="text-lg font-semibold text-white mb-4">Recent Blood Requests</h3>
           <div className="space-y-3">
@@ -86,7 +85,7 @@ const DashboardPage = () => {
           </div>
         </div>
 
-        {/* Blood Type Distribution */}
+        
         <div className="bg-slate-800 rounded-lg shadow-sm p-6 border border-slate-700">
           <h3 className="text-lg font-semibold text-white mb-4">Blood Type Distribution</h3>
           <div className="space-y-3">
