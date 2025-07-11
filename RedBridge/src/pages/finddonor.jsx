@@ -8,6 +8,8 @@ const donorData = [
     { id: 4, name: 'Rakshya Bhushal', address: '4 no. , Kapilbastu', bloodGroup: 'A+' },
     { id: 5, name: 'Sarad Bashyal', address: 'Butwal , Rupandehi', bloodGroup: 'B+' },
     { id: 6, name: 'Alisha Poudel', address: 'Tulsipur, Dang', bloodGroup: 'AB+' },
+    { id: 7, name: 'Ram Sharma', address: 'Bardiya', bloodGroup: 'A+' },
+    { id: 8, name: 'Gita Acharya', address: 'Gulmi', bloodGroup: 'AB-' },
 ];
 
 const FindDonor = () => {
