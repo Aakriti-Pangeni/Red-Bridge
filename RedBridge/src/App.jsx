@@ -20,6 +20,7 @@ import Signup from './auth/signup'
 import ContactUs from './pages/contactus'
 import BloodBank from './pages/Info/bloodbank'
 import DonorCheckList from './auth/checklist'
+import ForgotPassword from './auth/forgotpassword'
 
 
 function App() {
@@ -45,6 +46,7 @@ function App() {
           <Route path='/info/bloodbasics' element={<BloodBasics/>} />
           <Route path='/checklist' element={<DonorCheckList/>} />
           <Route path='/finddonor' element={<FindDonor/>} />
+          <Route path='/forgotpassword' element={<ForgotPassword/>} />
 
          
 

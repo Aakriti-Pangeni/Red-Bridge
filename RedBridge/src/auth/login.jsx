@@ -82,8 +82,10 @@ const Login = () => {
         />
 
         
-        <div className="text-sm text-blue-600 mb-6 cursor-pointer hover:underline">
-          Forgot Password
+        <div className="text-sm text-blue-600 mb-6 cursor-pointer hover:underline"><NavLink to={"/forgotpassword"} className="hover:text-blue-600 text-blue-600 transition-colors hover:underline">
+                      Forgot Password
+                    </NavLink>
+          
         </div>
 
        
