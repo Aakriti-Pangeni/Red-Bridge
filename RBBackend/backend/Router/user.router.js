@@ -8,9 +8,9 @@ router.post('/login', userController.login);
 router.post('/register', userController.register);
 router.post('/generate-otp', userController.otpgeneration);
 
-router.get('/profile', authMiddleware, userController.getUserProfile);
-router.put('/profile', authMiddleware, userController.updateUserProfile);
-router.delete('/profile', authMiddleware, userController.deleteUser);
+// router.get('/profile', authMiddleware, userController.getUserProfile);
+// router.put('/profile', authMiddleware, userController.updateUserProfile);
+// router.delete('/profile', authMiddleware, userController.deleteUser);
 
 export default router;
 
