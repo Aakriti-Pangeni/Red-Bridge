@@ -1,14 +1,49 @@
-import mongoose, { model } from "mongoose";
+// import mongoose from "mongoose";
+
+// const userSchema = new mongoose.Schema({
+//   userName: { type: String, required: true },
+//   email: { type: String, required: true, unique: true },
+//   password: { type: String, required: true },
+//   dateOfBirth: { type: Date, required: true },
+//    role: {
+//     type: String,
+//     enum: ['user', 'donor', 'admin'],
+//     default: 'user'
+//   }
+// }, { timestamps: true });
+
+// const User = mongoose.model('User', userSchema);
+
+// export default User;
+ 
+
+import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
-    userName :{type:String, required: true},
-    email: {type:String, required:true},
-    password:{type:String, required:true},
-    dateOfBirth:{type:Date, required: true},
-    // deletedAt: { type: Date, default: null}
-},{timestamps:true})
+  userName: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+  
+  address: { type: String, required: true },
+  role: {
+    type: String,
+    enum: ['user', 'donor', 'admin'],
+    default: 'user'
+  },
+  location: {
+    type: {
+      type: String,
+      enum: ['Point'],
+      default: 'Point'
+    },
+    coordinates: {
+      type: [Number], // [lng, lat]
+      required: true
+    }
+  }
+});
 
-const userModel = mongoose.model('User', userSchema)
+userSchema.index({ location: "2dsphere" });
 
-export default userModel
-
+const User = mongoose.model('User', userSchema);
+export default User;

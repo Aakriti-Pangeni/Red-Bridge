@@ -15,6 +15,7 @@ import RegisterDonor from './auth/register'
 import BloodBasics from './pages/info/bloodbasics'
 import FindDonor from './pages/finddonor'
 
+import DonorProfile from './pages/donorprofile'
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import Signup from './auth/signup'
 import ContactUs from './pages/contactus'
@@ -47,6 +48,7 @@ function App() {
           <Route path='/checklist' element={<DonorCheckList/>} />
           <Route path='/finddonor' element={<FindDonor/>} />
           <Route path='/forgotpassword' element={<ForgotPassword/>} />
+          <Route path='/donorprofile' element={<DonorProfile/>} />
 
          
 
