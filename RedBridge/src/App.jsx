@@ -22,6 +22,9 @@ import ContactUs from './pages/contactus'
 import BloodBank from './pages/Info/bloodbank'
 import DonorCheckList from './auth/checklist'
 import ForgotPassword from './auth/forgotpassword'
+import FindDonorWithRequest from './pages/findrequest';
+import OtpConfirmationPage from './auth/otpgen'
+import ScrollToTop from './components/service/scrolltop';
 
 
 function App() {
@@ -30,6 +33,7 @@ function App() {
   return (
     <>
      <BrowserRouter>
+     <ScrollToTop />
         <Routes>
           <Route path='' element={<Home />} />
           <Route path='/home' element={<Home />} />
@@ -49,9 +53,11 @@ function App() {
           <Route path='/finddonor' element={<FindDonor/>} />
           <Route path='/forgotpassword' element={<ForgotPassword/>} />
           <Route path='/donorprofile' element={<DonorProfile/>} />
+          <Route path='/findrequest' element={<FindDonorWithRequest/>} />
+          <Route path='/otpgen' element={<OtpConfirmationPage/>} />
+          
 
          
-
         </Routes>
       </BrowserRouter>
     

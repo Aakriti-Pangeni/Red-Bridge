@@ -18,7 +18,7 @@ const DonorProfile = ({  }) => {
         
         <div className="flex flex-col mb-2 ">
           <img
-            src={donor.image}
+            src="./src/assets/img/A-.jpg" 
             alt="Donor Profile"
             className="w-24 h-24 md:w-28 md:h-28 rounded-full object-cover shadow-md border-3 border-red-900"
           />

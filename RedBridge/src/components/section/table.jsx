@@ -113,7 +113,7 @@ import {faDroplet} from "@fortawesome/free-solid-svg-icons"
 const Table = () => {
   return (
     <>
-      <section className="flex flex-col md:flex-row justify-between gap-18 px-4 md:px-10 mt-10 mb-10">
+      <section className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between gap-10 px-4 md:px-10 mt-10 mb-10">
 
         {/* Left Side: Table */}
 <div className="w-full md:w-1/2">

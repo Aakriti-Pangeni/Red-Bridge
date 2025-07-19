@@ -121,7 +121,7 @@
 
 
 
-import getCoordinates from '../utils/geocode.js';   // ✅ Correct function
+import getCoordinates from '../utils/geocode.js';
 import bcrypt from 'bcryptjs';
 import User from '../models/user.model.js';
 import generatedToken from '../utils/token.js';
@@ -133,20 +133,31 @@ user.register = async (req, res) => {
   try {
     const { userName, email, password, address, role } = req.body;
 
+    // 1. Check if user already exists
     const existing = await User.findOne({ email });
-    if (existing) return res.status(400).json({ message: 'Email already in use' });
+    if (existing) {
+      return res.status(400).json({ message: 'Email already in use' });
+    }
 
-    const loc = await getCoordinates(address); // ✅ Use the correct function
-    if (!loc.length) {
+    // 2. Get coordinates
+    const loc = await getCoordinates(address);
+
+    // ✅ Fix: check if coordinates are valid
+    if (!loc || loc.length !== 2) {
       return res.status(400).json({ message: 'Invalid address for geolocation' });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const [longitude, latitude] = loc; // destructure from array
 
+    // 3. Block admin registration
     if (role === 'admin') {
       return res.status(403).json({ message: 'Cannot register as admin' });
     }
 
+    // 4. Hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // 5. Create user
     const newUser = new User({
       userName,
       email,
@@ -155,14 +166,15 @@ user.register = async (req, res) => {
       role: role || 'user',
       location: {
         type: 'Point',
-        coordinates: [loc[0].longitude, loc[0].latitude]
+        coordinates: [longitude, latitude]
       }
     });
 
+    // 6. Save user and generate token
     await newUser.save();
-
     const token = generatedToken(newUser._id);
 
+    // 7. Respond with user data
     res.status(201).json({
       user: {
         userName: newUser.userName,
@@ -179,11 +191,12 @@ user.register = async (req, res) => {
   }
 };
 
-
+// LOGIN CONTROLLER
 user.login = async (req, res) => {
   res.send("Login works");
 };
 
+// OTP GENERATION CONTROLLER
 user.otpgeneration = async (req, res) => {
   res.send("OTP generation works");
 };
