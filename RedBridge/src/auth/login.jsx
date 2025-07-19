@@ -1,14 +1,12 @@
-
 import React, { useState } from 'react'
-import { NavLink } from 'react-router-dom'
-import Signup from './signup'
 
 const Login = () => {
   const [formData, setFormData] = useState({
-    role: '',
     email: '',
     password: ''
   })
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
 
   const handleChange = (event) => {
     const { name, value } = event.target
@@ -16,12 +14,65 @@ const Login = () => {
       ...prev,
       [name]: value
     }))
+    // Clear error when user starts typing
+    if (error) setError('')
   }
 
-  const handleSubmit = (event) => {
+  // Function to set cookie
+  const setCookie = (name, value, days = 7) => {
+    const expires = new Date()
+    expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000))
+    document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/;secure;samesite=strict`
+  }
+
+  const handleSubmit = async (event) => {
     event.preventDefault()
-    // localStorage.setItem('formData', JSON.stringify(formData))
-    setFormData({ role: '', email: '', password: '' })
+    setLoading(true)
+    setError('')
+
+    try {
+      // Replace with your actual backend URL
+      const response = await fetch('http://localhost:4000/admin/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password
+        }),
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        // Store token in cookie
+        setCookie('authToken', data.token, 7) // Token expires in 7 days
+        
+        // Store user info if provided
+        if (data.user) {
+          setCookie('userInfo', JSON.stringify(data.user), 7)
+        }
+
+        // Reset form
+        setFormData({ email: '', password: '' })
+        
+        // Redirect to dashboard or home page
+        window.location.href = '/dashboard' // Change this to your desired route
+        
+        // Show success message (optional)
+        console.log('Login successful:', data.message)
+        
+      } else {
+        // Handle error response
+        setError(data.message || 'Login failed. Please try again.')
+      }
+    } catch (err) {
+      console.error('Login error:', err)
+      setError('Network error. Please check your connection and try again.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -34,24 +85,14 @@ const Login = () => {
           Sign In
         </h1>
 
-       
-        {/* <label htmlFor="role" className="block text-sm font-medium text-gray-700 mb-1">
-          Select Role <span className="text-red-600">*</span>
-        </label>
-        <select
-          id="role"
-          name="role"
-          value={formData.role}
-          onChange={handleChange}
-          className="w-full mb-4 p-2 border border-gray-300 rounded"
-          required
-        >
-          <option value="">Select Role</option>
-          <option value="Donor">Donor</option>
-          <option value="Receiver">Receiver</option>
-        </select> */}
+        {/* Error Message */}
+        {error && (
+          <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+            {error}
+          </div>
+        )}
 
-       
+        {/* Email Field */}
         <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
           Email Address <span className="text-red-600">*</span>
         </label>
@@ -62,11 +103,12 @@ const Login = () => {
           placeholder="Enter your email"
           value={formData.email}
           onChange={handleChange}
-          className="w-full mb-4 p-2 border border-gray-300 rounded"
+          className="w-full mb-4 p-2 border border-gray-300 rounded focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none"
           required
+          disabled={loading}
         />
 
-       
+        {/* Password Field */}
         <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
           Password <span className="text-red-600">*</span>
         </label>
@@ -77,31 +119,43 @@ const Login = () => {
           placeholder="Enter your password"
           value={formData.password}
           onChange={handleChange}
-          className="w-full mb-2 p-2 border border-gray-300 rounded"
+          className="w-full mb-2 p-2 border border-gray-300 rounded focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none"
           required
+          disabled={loading}
         />
 
-        
-        <div className="text-sm text-blue-600 mb-6 cursor-pointer hover:underline"><NavLink to={"/forgotpassword"} className="hover:text-blue-600 text-blue-600 transition-colors hover:underline">
-                      Forgot Password
-                    </NavLink>
-          
+        {/* Forgot Password Link */}
+        <div className="text-sm text-blue-600 mb-6">
+          <a 
+            href="/forgotpassword" 
+            className="hover:text-blue-800 transition-colors hover:underline"
+          >
+            Forgot Password?
+          </a>
         </div>
 
-       
+        {/* Submit Button */}
         <button
           type="submit"
-          className="w-full bg-red-900 text-white py-2 rounded hover:bg-red-800 transition"
+          disabled={loading}
+          className={`w-full py-2 rounded transition ${
+            loading 
+              ? 'bg-gray-400 cursor-not-allowed' 
+              : 'bg-red-900 hover:bg-red-800'
+          } text-white`}
         >
-          Log In
+          {loading ? 'Signing In...' : 'Log In'}
         </button>
 
-       
+        {/* Sign Up Link */}
         <p className="text-sm text-center mt-4">
-          Don't have an account? <NavLink to={"/signup"} className="hover:text-blue-600 text-blue-600 transition-colors hover:underline">
-                      Sign Up
-                    </NavLink>
-          
+          Don't have an account?{' '}
+          <a 
+            href="/signup" 
+            className="text-blue-600 hover:text-blue-800 transition-colors hover:underline"
+          >
+            Sign Up
+          </a>
         </p>
       </form>
     </section> 
