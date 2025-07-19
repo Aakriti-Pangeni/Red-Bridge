@@ -134,175 +134,128 @@
 // export default donor;
 
 
-import Donor from '../models/donor.model.js';
-import axios from 'axios';
-import { validationResult } from 'express-validator';
+import Donor from "../models/donor.model.js";
+import { validationResult } from "express-validator";
+import getCoordinates from "../utils/geocode.js"; // ✅ Your custom geocode utility
 
 const donor = {};
 
-// Helper to get lat/lon using OpenStreetMap API
-const getCoordinatesFromLocation = async (location) => {
-  try {
-    const response = await axios.get('https://nominatim.openstreetmap.org/search', {
-      params: {
-        q: location,
-        format: 'json',
-        limit: 1
-      },
-      headers: {
-        'User-Agent': 'RedBridge-BloodApp/1.0'
-      }
-    });
-
-    const data = response.data[0];
-    if (data) {
-      return {
-        latitude: parseFloat(data.lat),
-        longitude: parseFloat(data.lon)
-      };
-    } else {
-      return { latitude: null, longitude: null };
-    }
-  } catch (err) {
-    console.error('Geocoding failed:', err.message);
-    return { latitude: null, longitude: null };
-  }
-};
-
-// Create new donor
+// CREATE DONOR
 donor.createDonor = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
 
-  const {
-    name,
-    bloodType,
-    location,
-    contactNumber,
-    email,
-    lastDonationDate,
-    age,
-    medicalHistory
-  } = req.body;
+  const { name, email, bloodGroup, address, phone } = req.body;
 
-  if (!name || !bloodType || !location || !contactNumber || !email || !age) {
-    return res.status(400).json({ error: 'Missing required donor fields.' });
+  if (!name || !email || !bloodGroup || !address || !phone) {
+    return res.status(400).json({ error: "Missing required fields" });
   }
 
   try {
-    const { latitude, longitude } = await getCoordinatesFromLocation(location);
+    const coordinates = await getCoordinates(address);
+    if (!coordinates) {
+      return res.status(400).json({ error: "Invalid address for geolocation" });
+    }
 
     const newDonor = new Donor({
       name,
-      bloodType,
-      location,
-      latitude,
-      longitude,
-      contactNumber,
       email,
-      lastDonationDate,
-      age,
-      medicalHistory
+      bloodGroup,
+      address,
+      phone,
+      location: {
+        type: "Point",
+        coordinates: coordinates
+      }
     });
 
     const createdDonor = await newDonor.save();
     res.status(201).json(createdDonor);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Failed to create donor.' });
+  } catch (err) {
+    console.error("Create Donor Error:", err.message);
+    res.status(500).json({ error: "Failed to create donor." });
   }
 };
 
-// Get all donors
+// GET ALL DONORS
 donor.getAllDonors = async (req, res) => {
   try {
-    const donors = await Donor.find({});
+    const donors = await Donor.find();
     res.json(donors);
   } catch (err) {
-    res.status(500).json({ error: 'Failed to fetch donors.' });
+    res.status(500).json({ error: "Failed to fetch donors." });
   }
 };
 
-// Get donor by ID
+// GET DONOR BY ID
 donor.getDonorById = async (req, res) => {
   try {
-    const donor = await Donor.findById(req.params.id);
-    if (!donor) return res.status(404).json({ error: 'Donor not found' });
-    res.json(donor);
+    const found = await Donor.findById(req.params.id);
+    if (!found) return res.status(404).json({ error: "Donor not found" });
+    res.json(found);
   } catch (err) {
-    res.status(500).json({ error: 'Failed to fetch donor.' });
+    res.status(500).json({ error: "Error fetching donor" });
   }
 };
 
-// Update donor
+// UPDATE DONOR
 donor.updateDonor = async (req, res) => {
   try {
     const donorToUpdate = await Donor.findById(req.params.id);
-    if (!donorToUpdate) return res.status(404).json({ error: 'Donor not found' });
+    if (!donorToUpdate) return res.status(404).json({ error: "Donor not found" });
 
-    const {
-      name,
-      bloodType,
-      location,
-      contactNumber,
-      email,
-      lastDonationDate,
-      age,
-      medicalHistory
-    } = req.body;
+    const { name, email, bloodGroup, address, phone } = req.body;
 
-    if (location && location !== donorToUpdate.location) {
-      const { latitude, longitude } = await getCoordinatesFromLocation(location);
-      donorToUpdate.latitude = latitude;
-      donorToUpdate.longitude = longitude;
+    if (address && address !== donorToUpdate.address) {
+      const coordinates = await getCoordinates(address);
+      if (!coordinates) {
+        return res.status(400).json({ error: "Invalid address for geolocation" });
+      }
+      donorToUpdate.location = {
+        type: "Point",
+        coordinates
+      };
+      donorToUpdate.address = address;
     }
 
     donorToUpdate.name = name || donorToUpdate.name;
-    donorToUpdate.bloodType = bloodType || donorToUpdate.bloodType;
-    donorToUpdate.location = location || donorToUpdate.location;
-    donorToUpdate.contactNumber = contactNumber || donorToUpdate.contactNumber;
     donorToUpdate.email = email || donorToUpdate.email;
-    donorToUpdate.lastDonationDate = lastDonationDate || donorToUpdate.lastDonationDate;
-    donorToUpdate.age = age || donorToUpdate.age;
-    donorToUpdate.medicalHistory = medicalHistory || donorToUpdate.medicalHistory;
+    donorToUpdate.bloodGroup = bloodGroup || donorToUpdate.bloodGroup;
+    donorToUpdate.phone = phone || donorToUpdate.phone;
 
-    const updatedDonor = await donorToUpdate.save();
-    res.json(updatedDonor);
+    const updated = await donorToUpdate.save();
+    res.json(updated);
   } catch (err) {
-    res.status(500).json({ error: 'Failed to update donor.' });
+    res.status(500).json({ error: "Failed to update donor." });
   }
 };
 
-// Delete donor
+// DELETE DONOR
 donor.deleteDonor = async (req, res) => {
   try {
     const donor = await Donor.findById(req.params.id);
-    if (!donor) return res.status(404).json({ error: 'Donor not found' });
+    if (!donor) return res.status(404).json({ error: "Donor not found" });
 
     await donor.remove();
-    res.json({ message: 'Donor removed' });
+    res.json({ message: "Donor removed" });
   } catch (err) {
-    res.status(500).json({ error: 'Failed to delete donor.' });
+    res.status(500).json({ error: "Failed to delete donor." });
   }
 };
 
-// Search donors (basic linear search with filters, KNN in searchController)
+// BASIC LINEAR SEARCH
 donor.searchDonors = async (req, res) => {
-  const { bloodType, location } = req.query;
+  const { bloodGroup, address } = req.query;
 
   const query = {};
-  if (bloodType) query.bloodType = bloodType;
-  if (location) query.location = { $regex: location, $options: 'i' };
-
-  const eligibleDate = new Date();
-  eligibleDate.setDate(eligibleDate.getDate() - 56);
-  query.lastDonationDate = { $lte: eligibleDate };
+  if (bloodGroup) query.bloodGroup = bloodGroup;
+  if (address) query.address = { $regex: address, $options: "i" };
 
   try {
     const donors = await Donor.find(query);
     res.json(donors);
   } catch (err) {
-    res.status(500).json({ error: 'Failed to search donors.' });
+    res.status(500).json({ error: "Search failed." });
   }
 };
 

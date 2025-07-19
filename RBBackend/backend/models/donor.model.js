@@ -83,5 +83,5 @@ const donorSchema = new mongoose.Schema({
 
 donorSchema.index({ location: "2dsphere" });
 
-const Donor = mongoose.model('Donor', donorSchema);
+const Donor = mongoose.model("Donor", donorSchema);
 export default Donor;
