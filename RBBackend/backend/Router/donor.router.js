@@ -4,7 +4,7 @@ import donorController from '../controllers/donor.controller.js';
 const router = express.Router();
 
 // Create donor
-router.post('/', donorController.createDonor);
+router.post('/register', donorController.createDonor);
 
 // Get all donors
 router.get('/', donorController.getAllDonors);
