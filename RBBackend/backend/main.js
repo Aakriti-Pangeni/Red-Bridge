@@ -1,7 +1,7 @@
 import express from 'express'
 import userRouter from './Router/user.router.js'
 import admminRouter from './Router/admin.router.js'
-import donorrouter from './Router/donor.router.js'
+import donorRouter from './Router/donor.router.js'
 import cors from 'cors';
 
 // import searchRouter from './Router/search.router.js'
@@ -15,7 +15,7 @@ app.use(cors({
 app.use(express.json())
 // app.use('/search', searchRouter)
 app.use('/admin', admminRouter)
-app.use('/donor', donorrouter)
+app.use('/donor', donorRouter)
 app.use('/user', userRouter)
 
 app.get('/', (req, res)=>{

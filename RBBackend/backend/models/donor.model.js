@@ -55,32 +55,108 @@
 // export default mongoose.model('Donor', donorSchema);
 
 
+// import mongoose from "mongoose";
+
+// const donorSchema = new mongoose.Schema({
+//   name: { type: String, required: true },
+//   email: { type: String, required: true, unique: true },
+//   bloodGroup: { type: String, required: true },
+//   address: { type: String, required: true },
+//   phone: { type: String, required: true },
+//   role: {
+//     type: String,
+//     enum: ['donor'],
+//     default: 'donor'
+//   },
+//   location: {
+//     type: {
+//       type: String,
+//       enum: ['Point'],
+//       default: 'Point'
+//     },
+//     coordinates: {
+//       type: [Number], // [lng, lat]
+//       required: true
+//     }
+//   }
+// });
+
+// donorSchema.index({ location: "2dsphere" });
+
+// const Donor = mongoose.model("Donor", donorSchema);
+// export default Donor;
+
+
+
+
+
+// import mongoose from "mongoose";
+
+// const donorSchema = new mongoose.Schema({
+//   name: { type: String, required: true },
+//   email: { type: String, required: true, unique: true },
+//   bloodGroup: { type: String, required: true },
+//   address: { type: String, required: true },
+//   phone: { type: String, required: true },
+//   role: {
+//     type: String,
+//     enum: ['donor'],
+//     default: 'donor'
+//   },
+//   location: {
+//     type: {
+//       type: String,
+//       enum: ['Point'],
+//       default: 'Point'
+//     },
+//     coordinates: {
+//       type: [Number], // [lng, lat]
+//       required: true
+//     }
+//   },
+//   user: {
+//     type: mongoose.Schema.Types.ObjectId,
+//     ref: 'User',
+//     required: true
+//   }
+// });
+
+// donorSchema.index({ location: "2dsphere" });
+
+// const Donor = mongoose.model("Donor", donorSchema);
+// export default Donor;
+
+
 import mongoose from "mongoose";
 
 const donorSchema = new mongoose.Schema({
   name: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
+  email: { type: String, required: true },
+  phone: { type: String, required: true },
+  dob: { type: String, required: true },
+  gender: { type: String, required: true },
   bloodGroup: { type: String, required: true },
   address: { type: String, required: true },
-  phone: { type: String, required: true },
-  role: {
-    type: String,
-    enum: ['donor'],
-    default: 'donor'
-  },
+  
   location: {
     type: {
       type: String,
       enum: ['Point'],
-      default: 'Point'
+      default: 'Point',
     },
     coordinates: {
-      type: [Number], // [lng, lat]
-      required: true
-    }
+      type: [Number], // [longitude, latitude]
+      required: true,
+    },
+  },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
   }
 });
 
+// Create geospatial index for location
 donorSchema.index({ location: "2dsphere" });
 
 const Donor = mongoose.model("Donor", donorSchema);
