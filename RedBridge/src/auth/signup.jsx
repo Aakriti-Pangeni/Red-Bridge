@@ -1,10 +1,11 @@
 import React, { useState } from "react"
 import Login from "./login"
 import { NavLink } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 
 const Signup = () => {
   const [formData, setFormData] = useState({
-    fullName:'',
+    userName:'',
     email: '',
     phonenumber:'',
     password: '',
@@ -23,8 +24,9 @@ const Signup = () => {
 
   const validate = () => {
     const newErrors = {}
-    if(formData.fullName.length <= 2){
-      newErrors.fullName ="Please enter your Full Name"
+
+    if(formData.userName.length <= 2){
+      newErrors.userName ="Please enter your Full Name"
     }
     
     if (!formData.email.includes('@')) {
@@ -47,24 +49,55 @@ const Signup = () => {
     return Object.keys(newErrors).length === 0
   }
 
-  const handleSubmit = (e) => {
-    event.preventDefault()
+ const handleSubmit = async (event) => {
+  event.preventDefault();
 
-    if (!validate()) return
+  if (!validate()) return;
 
-    localStorage.setItem('signupData', JSON.stringify(formData))
-    // alert('Account created successfully!')
+  try {
+    const { userName, email, phonenumber, password } = formData;
 
+    const res = await fetch("http://localhost:4000/user/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userName, email, phonenumber, password })
+    });
+
+    if (!res.ok) throw new Error("Signup failed");
+
+    const data = await res.json(); // Should return { user, token }
+
+    // Set cookies like in login
+    const setCookie = (name, value, days = 7) => {
+      const expires = new Date();
+      expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+      document.cookie = `${name}=${encodeURIComponent(value)};expires=${expires.toUTCString()};path=/;secure;samesite=strict`;
+    };
+
+    if (data.token) setCookie("authToken", data.token);
+    if (data.user) setCookie("userInfo", JSON.stringify(data.user));
+
+    // Reset form
     setFormData({
-      fullName:'',
+      userName: '',
       email: '',
-      phonenumber:'',
+      phonenumber: '',
       password: '',
       confirmPassword: ''
-    })
+    });
 
-    setErrors({})
+    setErrors({});
+    alert("User registered successfully!");
+
+    // Redirect to homepage
+    window.location.href = "http://localhost:5173/";
+  } catch (err) {
+    console.error("Signup error:", err);
+    alert("There was a problem registering.");
   }
+};
+
+
 
   return (
    
@@ -80,14 +113,14 @@ const Signup = () => {
             <label className="block text-sm font-medium mb-1">Full Name</label>
             <input
               type="text"
-              name="fullName"
+              name="userName"
               placeholder="Enter Full Name"
               className="w-full border border-gray-300 rounded px-4 py-2 text-sm focus:outline-none"
-              value={formData.fullName}
+              value={formData.userName}
               onChange={handleChange}
               required
             />
-            {errors.fullName && <p className="text-red-600 text-sm mt-1">{errors.fullName}</p>}
+            {errors.userName && <p className="text-red-600 text-sm mt-1">{errors.userName}</p>}
           </div>
 
           <div>

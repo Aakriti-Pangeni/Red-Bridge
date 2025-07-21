@@ -4,12 +4,12 @@ import { useNavigate } from 'react-router-dom';
 const RegisterDonor = () => {
   const [formData, setFormData] = useState({
     name: '',
-    contact: '',
     email: '',
-    dateOfBirth: '',
+    phone: '',
+    dob: '',
     gender: '',
     bloodGroup: '',
-    location: '',
+    address: '',
     password: '',
     confirmPassword: '',
   });
@@ -28,12 +28,12 @@ const RegisterDonor = () => {
   const validate = () => {
     const newErrors = {};
     if (formData.name.trim().length < 4) newErrors.name = 'Name must be at least 4 characters';
-    if (!/^\d{10}$/.test(formData.contact)) newErrors.contact = 'Contact must be exactly 10 digits';
     if (!/^\S+@\S+\.\S+$/.test(formData.email)) newErrors.email = 'Invalid email format';
-    if (!formData.dateOfBirth) newErrors.dateOfBirth = 'Date of birth is required';
+    if (!/^\d{10}$/.test(formData.phone)) newErrors.phone = 'Contact must be exactly 10 digits';
+    if (!formData.dob) newErrors.dob = 'Date of birth is required';
     if (!formData.gender) newErrors.gender = 'Please select gender';
     if (!formData.bloodGroup) newErrors.bloodGroup = 'Please select blood group';
-    if (!formData.location.trim()) newErrors.location = 'Location is required';
+    if (!formData.address.trim()) newErrors.address = 'Location is required';
     if (
       !/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(formData.password)
     )
@@ -45,16 +45,64 @@ const RegisterDonor = () => {
     return newErrors;
   };
 
-  const handleSubmit = (e) => {
-    event.preventDefault();
-    const validationErrors = validate();
-    setErrors(validationErrors);
+//   const handleSubmit = async (event) => {
+//   event.preventDefault();
+//   const validationErrors = validate();
+//   setErrors(validationErrors);
 
-    if (Object.keys(validationErrors).length === 0) {
-    //   alert('Registration successful!');
+//   if (Object.keys(validationErrors).length === 0) {
+//     try {
+//       const res = await fetch("http://localhost:4000/donor/register", {
+//         method: "POST",
+//         headers: { "Content-Type": "application/json" },
+//         body: JSON.stringify(formData)
+//       });
+
+//       if (!res.ok) throw new Error("Registration failed");
+
+//       alert("Donor registered successfully!");
+//       navigate('/checklist');
+//     } catch (err) {
+//       console.error("Donor registration error:", err);
+//       alert("There was a problem registering the donor.");
+//     }
+//   }
+// };
+
+
+const handleSubmit = async (event) => {
+  event.preventDefault();
+  const validationErrors = validate();
+  setErrors(validationErrors);
+
+  if (Object.keys(validationErrors).length === 0) {
+    try {
+      const res = await fetch("http://localhost:4000/donor/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData)
+      });
+
+      if (!res.ok) throw new Error("Registration failed");
+
+      const data = await res.json();
+
+      // ✅ Save token and donor data to localStorage
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.donor));
+
       navigate('/checklist');
+
+      
+      alert("Donor registered successfully!");
+      
+    } catch (err) {
+      console.error("Donor registration error:", err);
+      alert("There was a problem registering the donor.");
     }
-  };
+  }
+};
+
 
   return (
     <section className='w-full flex flex-col p-7 justify-center items-center bg-gray-200 '>
@@ -79,20 +127,8 @@ const RegisterDonor = () => {
           </div>
 
           
-          <div className='flex flex-col'>
-            <label className='block text-sm font-medium mb-0.5'>Contact:</label>
-            <input
-              type="tel"
-              name="contact"
-              placeholder="Enter your contact"
-              className="w-full border border-gray-300 rounded px-4 py-2 text-sm"
-              value={formData.contact}
-              onChange={handleChange}
-              required
-            />
-            {errors.contact && <span className="text-red-600 text-xs">{errors.contact}</span>}
-          </div>
 
+       
           
           <div className='flex flex-col'>
             <label className='block text-sm font-medium mb-0.5'>Email:</label>
@@ -108,17 +144,32 @@ const RegisterDonor = () => {
             {errors.email && <span className="text-red-600 text-xs">{errors.email}</span>}
           </div>
 
+
+             <div className='flex flex-col'>
+            <label className='block text-sm font-medium mb-0.5'>Phone Number:</label>
+            <input
+              type="tel"
+              name="phone"
+              placeholder="Enter your phone number"
+              className="w-full border border-gray-300 rounded px-4 py-2 text-sm"
+              value={formData.phone}
+              onChange={handleChange}
+              required
+            />
+            {errors.phone && <span className="text-red-600 text-xs">{errors.phone}</span>}
+          </div>
+
           <div className='flex flex-col'>
             <label className='block text-sm font-medium mb-0.5'>Date Of Birth:</label>
             <input
               type="date"
-              name="dateOfBirth"
+              name="dob"
               className="w-full border border-gray-300 rounded px-4 py-2 text-sm"
-              value={formData.dateOfBirth}
+              value={formData.dob}
               onChange={handleChange}
               required
             />
-            {errors.dateOfBirth && <span className="text-red-600 text-xs">{errors.dateOfBirth}</span>}
+            {errors.dob && <span className="text-red-600 text-xs">{errors.dob}</span>}
           </div>
 
           <div className='flex gap-16'>
@@ -165,17 +216,17 @@ const RegisterDonor = () => {
           </div>
 
           <div className='flex flex-col'>
-            <label className='block text-sm font-medium mb-0.5'>Location (District/City):</label>
+            <label className='block text-sm font-medium mb-0.5'>Address: (District/City):</label>
             <input
               type="text"
-              name="location"
+              name="address"
               placeholder="Enter your District/City"
               className="w-full border border-gray-300 rounded px-4 py-2 text-sm"
-              value={formData.location}
+              value={formData.address}
               onChange={handleChange}
               required
             />
-            {errors.location && <span className="text-red-600 text-xs">{errors.location}</span>}
+            {errors.address && <span className="text-red-600 text-xs">{errors.address}</span>}
           </div>
 
          

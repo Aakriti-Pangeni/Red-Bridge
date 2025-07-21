@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 
+
 const Login = () => {
   const [formData, setFormData] = useState({
     email: '',
@@ -32,7 +33,7 @@ const Login = () => {
 
     try {
       // Replace with your actual backend URL
-      const response = await fetch('http://localhost:4000/admin/login', {
+      const response = await fetch('http://localhost:4000/user/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -58,7 +59,7 @@ const Login = () => {
         setFormData({ email: '', password: '' })
         
         // Redirect to dashboard or home page
-        window.location.href = '/dashboard' // Change this to your desired route
+        window.location.href = 'http://localhost:5173/' // Change this to your desired route
         
         // Show success message (optional)
         console.log('Login successful:', data.message)
