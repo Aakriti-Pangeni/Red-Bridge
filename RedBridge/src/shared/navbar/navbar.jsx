@@ -411,7 +411,7 @@ const NavBar = () => {
           {user ? (
             <>
               <NavLink to="/donorprofile" className="text-white font-semibold hover:text-cyan-400">
-                {user.userName.split(" ")[0]}
+                Welcome, {user.userName.split(" ")[0]}
               </NavLink>
               <button
                 onClick={handleLogout}

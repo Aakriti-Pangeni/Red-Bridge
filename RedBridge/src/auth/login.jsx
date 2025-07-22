@@ -78,10 +78,15 @@ const Login = () => {
 
   return (
     <section className="flex justify-center items-center min-h-screen bg-gray-200 px-4">
+      
       <form
         onSubmit={handleSubmit}
         className="w-full max-w-md bg-white shadow-md rounded-lg p-8"
       >
+      
+      <div className="flex flex-col items-center">
+            <img src="/bloodIcon.ico" alt="logo" className=" flex justify-center items-center h-10 w-10" /><span className="mb-3">RedBridge</span> 
+</div>
         <h1 className="text-2xl font-bold text-red-900 mb-6 text-center">
           Sign In
         </h1>

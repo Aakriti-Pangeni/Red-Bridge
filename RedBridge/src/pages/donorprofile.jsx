@@ -69,17 +69,22 @@ import { useNavigate, useParams } from "react-router-dom";
 import MainLayout from "../shared/sidebar/mainlayout";
 
 const DonorProfile = () => {
-  const { id } = useParams(); // get donor ID from URL
+  // const { id } = useParams(); // get donor ID from URL
   const navigate = useNavigate();
   const [donor, setDonor] = useState(null);
 
+  let id= "687dd2bc10825d008a9e64d2";
+  console.log("donor id", id);
   useEffect(() => {
+  
     const fetchDonor = async () => {
       try {
-        const res = await fetch(`http://localhost:4000/donor/${id}`);
+        const res = await fetch(`http://localhost:4000/donor/${id}`,);
         if (!res.ok) throw new Error("Failed to fetch donor");
+        console.log("res", res)
         const data = await res.json();
         setDonor(data);
+        console.log("donor data", data);
       } catch (err) {
         console.error("Error fetching donor:", err);
       }
@@ -90,9 +95,11 @@ const DonorProfile = () => {
 
   if (!donor) {
     return (
+      <MainLayout>
       <div className="flex justify-center items-center h-screen">
         <p className="text-gray-500">No donor data found.</p>
       </div>
+      </MainLayout>
     );
   }
 
@@ -140,9 +147,9 @@ const DonorProfile = () => {
             </button>
             <button
               className="px-6 py-2 bg-blue-950 text-white rounded hover:bg-blue-900 transition text-sm md:text-base"
-              onClick={() => navigate("/dashboard")}
+              onClick={() => navigate("/home")}
             >
-              Back to Dashboard
+              Back to Home
             </button>
           </div>
         </div>

@@ -25,6 +25,7 @@ import ForgotPassword from './auth/forgotpassword'
 import FindDonorWithRequest from './pages/findrequest';
 import OtpConfirmationPage from './auth/otpgen'
 import ScrollToTop from './components/service/scrolltop';
+import { ToastContainer } from 'react-toastify';
 
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
   return (
     <>
      <BrowserRouter>
+     <ToastContainer  autoClose={3000} />
      <ScrollToTop />
         <Routes>
           <Route path='' element={<Home />} />

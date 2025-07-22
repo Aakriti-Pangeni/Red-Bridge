@@ -101,10 +101,12 @@ const Signup = () => {
 
   return (
    
-    <section className="flex justify-center items-center  min-h-screen bg-gray-200 px-4">
+    <section className="flex justify-center items-center  min-h-screen  bg-gray-200 px-4">
    
-      <div className="bg-white shadow-md rounded-lg px-8 py-10 w-full max-w-md">
-        
+      <div className="bg-white shadow-md rounded-lg px-8 py-10 mt-5 mb-5 w-full max-w-md">
+        <div className="flex flex-col items-center">
+            <img src="/bloodIcon.ico" alt="logo" className=" flex justify-center items-center h-10 w-10" /><span className="mb-3">RedBridge</span> 
+</div>
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <h2 className="text-2xl font-bold mb-6 text-center text-red-900">Create Account</h2>
