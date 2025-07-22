@@ -137,7 +137,7 @@ const donorSchema = new mongoose.Schema({
   gender: { type: String, required: true },
   bloodGroup: { type: String, required: true },
   address: { type: String, required: true },
-  
+  lastDonation: { type: String, default: null },
   location: {
     type: {
       type: String,

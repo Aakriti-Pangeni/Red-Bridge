@@ -1,43 +1,78 @@
-// import React from 'react'
-// import { NavLink } from 'react-router-dom'
+
+
+
+// import React, { useEffect, useState } from "react";
+// import { NavLink } from "react-router-dom";
+// import axios from "axios";
 
 // const Welcome = () => {
+//   const [isDonor, setIsDonor] = useState(false);
+//   const [userId, setUserId] = useState(null);
+
+//   // Get user ID from localStorage
+//   useEffect(() => {
+//     const stored = localStorage.getItem("userInfo");
+//     if (stored) {
+//       const user = JSON.parse(stored);
+//       setUserId(user._id);
+//     }
+//   }, []);
+
+//   // Check donor status using user ID
+//   useEffect(() => {
+//     const checkDonorStatus = async () => {
+//       try {
+//         if (userId) {
+//           const res = await axios.get(`/donor/profile/${userId}`);
+//           if (res.data && res.data._id) {
+//             setIsDonor(true); // ✅ Mark user as donor
+//           }
+//         }
+//       } catch (err) {
+//         setIsDonor(false); // ✅ Not a donor
+//       }
+//     };
+
+//     checkDonorStatus();
+//   }, [userId]);
+
 //   return (
 //     <>
 //       <section className="relative pt-10">
-//   <img
-//     src="./src/assets/img/welcome.jpg"
-//     className="w-full h-120 opacity-65"
-//     alt="Welcome Banner"
-//   />
-//   <div className="absolute top-23 left-1/2 transform -translate-x-1/2 text-center">
-//     <h1 className="text-4xl font-semibold text-red-900">Welcome to RedBridge</h1>
-//     <h2 className="text-2xl text-blue-950">Donate Blood, Save Lives</h2>
-//   </div>
-// </section>
-
+//         <img
+//           src="./src/assets/img/welcome.jpg"
+//           className="w-full h-120 opacity-65"
+//           alt="Welcome Banner"
+//         />
+//         <div className="absolute top-23 left-1/2 transform -translate-x-1/2 text-center">
+//           <h1 className="text-4xl font-semibold text-red-900">Welcome to RedBridge</h1>
+//           <h2 className="text-2xl text-blue-950">Donate Blood, Save Lives</h2>
+//         </div>
+//       </section>
 
 //       <section className="flex flex-col sm:flex-row justify-center items-center mt-10 mb-12 gap-18 px-4">
-//   <NavLink to="/checklist">
-//     <button className="w-55 transition-colors bg-blue-950 text-white rounded-[9px] px-6 py-3 hover:text-blue-950 hover:bg-white border border-blue-950">
-//       Register as Donor
-//     </button>
-//   </NavLink>
 
-//   <NavLink to="/finddonor">
-//     <button className="w-55 transition-colors bg-blue-950 text-white rounded-[9px] px-6 py-3 hover:text-blue-950 hover:bg-white border border-blue-950">
-//       Find Donor
-//     </button>
-//   </NavLink>
-// </section>
+//         {/* ❌ Remove this button if user is donor */}
+//         {!isDonor && (
+//           <NavLink to="/checklist">
+//             <button className="w-55 transition-colors bg-blue-950 text-white rounded-[9px] px-6 py-3 hover:text-blue-950 hover:bg-white border border-blue-950">
+//               Register as Donor
+//             </button>
+//           </NavLink>
+//         )}
 
-      
-
+//         {/* ✅ Always show this */}
+//         <NavLink to="/finddonor">
+//           <button className="w-55 transition-colors bg-blue-950 text-white rounded-[9px] px-6 py-3 hover:text-blue-950 hover:bg-white border border-blue-950">
+//             Find Donor
+//           </button>
+//         </NavLink>
+//       </section>
 //     </>
-//   )
-// }
+//   );
+// };
 
-// export default Welcome
+// export default Welcome;
 
 
 
@@ -45,31 +80,44 @@ import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import axios from "axios";
 
+// Utility function to get cookie value by name
+const getCookie = (name) => {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(";").shift();
+  return null;
+};
+
 const Welcome = () => {
   const [isDonor, setIsDonor] = useState(false);
   const [userId, setUserId] = useState(null);
 
-  // Get user ID from localStorage
+  // ✅ Get user ID from cookie (as used in DonorProfile)
   useEffect(() => {
-    const stored = localStorage.getItem("userInfo");
-    if (stored) {
-      const user = JSON.parse(stored);
-      setUserId(user._id);
+    const idFromCookie = getCookie("userInfo");
+    let parsed = null;
+    try {
+      parsed = idFromCookie ? JSON.parse(idFromCookie) : null;
+    } catch (e) {
+      parsed = null;
+    }
+    if (parsed && parsed.id) {
+      setUserId(parsed.id);
     }
   }, []);
 
-  // Check donor status using user ID
+  // ✅ Check if user is a registered donor
   useEffect(() => {
     const checkDonorStatus = async () => {
       try {
         if (userId) {
-          const res = await axios.get(`/donor/profile/${userId}`);
+          const res = await axios.get(`http://localhost:4000/donor/profile/${userId}`);
           if (res.data && res.data._id) {
-            setIsDonor(true); // ✅ Mark user as donor
+            setIsDonor(true); // User is a donor
           }
         }
       } catch (err) {
-        setIsDonor(false); // ✅ Not a donor
+        setIsDonor(false); // Not a donor
       }
     };
 
@@ -91,17 +139,22 @@ const Welcome = () => {
       </section>
 
       <section className="flex flex-col sm:flex-row justify-center items-center mt-10 mb-12 gap-18 px-4">
-
-        {/* ❌ Remove this button if user is donor */}
-        {!isDonor && (
+        {/* ✅ Conditional Button based on donor status */}
+        {!isDonor ? (
           <NavLink to="/checklist">
             <button className="w-55 transition-colors bg-blue-950 text-white rounded-[9px] px-6 py-3 hover:text-blue-950 hover:bg-white border border-blue-950">
               Register as Donor
             </button>
           </NavLink>
+        ) : (
+          <NavLink to="/donorprofile">
+            <button className="w-55 transition-colors bg-blue-950 text-white rounded-[9px] px-6 py-3 hover:text-blue-950 hover:bg-white border border-blue-950">
+              Your Profile
+            </button>
+          </NavLink>
         )}
 
-        {/* ✅ Always show this */}
+        {/* ✅ Always show Find Donor */}
         <NavLink to="/finddonor">
           <button className="w-55 transition-colors bg-blue-950 text-white rounded-[9px] px-6 py-3 hover:text-blue-950 hover:bg-white border border-blue-950">
             Find Donor
