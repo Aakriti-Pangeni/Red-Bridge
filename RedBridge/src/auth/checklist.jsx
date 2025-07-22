@@ -217,26 +217,37 @@ const DonorCheckList = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    // 🔎 1. make sure every question is answered
-    const unanswered = Object.entries(formData).filter(
-      ([, v]) => v !== "yes" && v !== "no"
-    );
-    if (unanswered.length) {
-      toast.error("Please answer all questions.");
-      return;
-    }
+  // 1. Check all answered
+  const unanswered = Object.entries(formData).filter(
+    ([, v]) => v !== "yes" && v !== "no"
+  );
+  if (unanswered.length) {
+    toast.error("Please answer all questions.");
+    return;
+  }
 
-    // 📝 2. (optional) send to backend here
-    // await fetch("/donor/checklist", { method:"POST", ... });
+  // 2. Validate eligibility
+  if (
+    formData.age !== "yes" ||
+    formData.weight !== "yes" ||
+    formData.chronicDisease !== "no" ||
+    formData.testedPositive !== "no" ||
+    formData.bloodTransfusion !== "no" ||
+    formData.onMedication !== "no"
+  ) {
+    toast.error("You are not eligible to register as a donor.");
+    return;
+  }
 
-    // 🎉 3. success toast, then redirect
-    toast.success("Checklist completed!");
-    // setTimeout(() => navigate("/home"), 1500);
+  // 3. If passed, go to donor registration form
+  toast.success("You are eligible to donate blood!");
+  
+    navigate("/register");
+  
+};
 
-     window.location.href = "http://localhost:5173/";
-  };
 
   return (
     <>
@@ -416,7 +427,7 @@ const DonorCheckList = () => {
                 type="submit"
                 className="h-9 w-56 mt-3 bg-[#660000] hover:bg-[#800000] text-white flex justify-center items-center font-medium py-2 rounded-2xl"
               >
-                Register
+                Submit To Register
               </button>
             </div>
           </form>

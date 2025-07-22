@@ -66,6 +66,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import MainLayout from "../shared/sidebar/mainlayout";
 
 const DonorProfile = () => {
@@ -96,9 +97,17 @@ const DonorProfile = () => {
   if (!donor) {
     return (
       <MainLayout>
-      <div className="flex justify-center items-center h-screen">
-        <p className="text-gray-500">No donor data found.</p>
-      </div>
+     <div className="flex justify-center items-center h-screen">
+  <div className="text-center">
+    <p className="text-gray-500 text-lg mb-4">No donor data found.</p>
+
+    <NavLink to="/register">
+      <button className="px-4 py-2 bg-blue-950 text-white rounded hover:bg-blue-900">
+        Register as Donor
+      </button>
+    </NavLink>
+  </div>
+</div>
       </MainLayout>
     );
   }

@@ -18,7 +18,7 @@ const Welcome = () => {
 
 
       <section className="flex flex-col sm:flex-row justify-center items-center mt-10 mb-12 gap-18 px-4">
-  <NavLink to="/register">
+  <NavLink to="/checklist">
     <button className="w-55 transition-colors bg-blue-950 text-white rounded-[9px] px-6 py-3 hover:text-blue-950 hover:bg-white border border-blue-950">
       Register as Donor
     </button>

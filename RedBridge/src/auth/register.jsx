@@ -314,45 +314,45 @@ const RegisterDonor = () => {
 
 
 const handleSubmit = async (event) => {
-   <ToastContainer />
+  <ToastContainer/>
   event.preventDefault();
+
   const validationErrors = validate();
   setErrors(validationErrors);
+  if (Object.keys(validationErrors).length > 0) return;
 
-  if (Object.keys(validationErrors).length === 0) {
-    try {
-      const res = await fetch("http://localhost:4000/donor/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData)
-      });
+  try {
+    const res = await fetch("http://localhost:4000/donor/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    });
 
-      const data = await res.json();
-      
-      if (!res.ok) {
-       
+    if (!res.ok) throw new Error("Registration failed");
 
-        const message = data.error || "Registration failed.";
-        toast.error(message);
-        return;
-      }
+    const data = await res.json(); // Should return { donor, token }
 
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.donor));
+    // ✅ Set cookies
+    const setCookie = (name, value, days = 7) => {
+      const expires = new Date();
+      expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
+      document.cookie = `${name}=${encodeURIComponent(value)};expires=${expires.toUTCString()};path=/;secure;samesite=strict`;
+    };
 
-      toast.success("Registration successful!");
+    if (data.token) setCookie("authToken", data.token);
+    if (data.donor) setCookie("userInfo", JSON.stringify(data.user));
 
-      
-        navigate("/checklist");
+    // ✅ Optional: also save to localStorage if your app reads from it
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("user", JSON.stringify(data.user));
 
-         
-      
+    toast.success("Registration successful!");
 
-    } catch (err) {
-      console.error("Donor registration error:", err);
-      toast.error("There was a problem registering. Please try again.");
-    }
-   
+    // ✅ Redirect to home (logged in)
+    window.location.href = "http://localhost:5173/";
+  } catch (err) {
+    console.error("Donor registration error:", err);
+    toast.error("There was a problem registering. Please try again.");
   }
 };
 

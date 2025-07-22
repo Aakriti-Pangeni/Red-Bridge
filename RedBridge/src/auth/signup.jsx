@@ -22,6 +22,10 @@ const Signup = () => {
     }))
   }
 
+  const [showPassword, setShowPassword] = useState(false);
+const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+
   const validate = () => {
     const newErrors = {}
 
@@ -142,7 +146,7 @@ const Signup = () => {
            <div>
             <label className="block text-sm font-medium mb-1">Phone Number</label>
             <input
-              type="number"
+              type="tel"
               name="phonenumber"
               placeholder="Enter your phone number"
               className="w-full border border-gray-300 rounded px-4 py-2 text-sm focus:outline-none"
@@ -155,34 +159,48 @@ const Signup = () => {
 
 
           
-          <div>
-            <label className="block text-sm font-medium mb-1">Password</label>
-            <input
-              type="password"
-              name="password"
-              placeholder="Create a password"
-              className="w-full border border-gray-300 rounded px-4 py-2 text-sm focus:outline-none"
-              value={formData.password}
-              onChange={handleChange}
-              required
-            />
-            {errors.password && <p className="text-red-600 text-sm mt-1">{errors.password}</p>}
-          </div>
+          <div className="relative">
+  <label className="block text-sm font-medium mb-1">Password</label>
+  <input
+    type={showPassword ? "text" : "password"}
+    name="password"
+    placeholder="Create a password"
+    className="w-full border border-gray-300 rounded px-4 py-2 text-sm focus:outline-none pr-10"
+    value={formData.password}
+    onChange={handleChange}
+    required
+  />
+  <button
+    type="button"
+    className="absolute right-2 top-8 text-sm text-gray-500"
+    onClick={() => setShowPassword(prev => !prev)}
+  >
+    {showPassword ? "Hide" : "Show"}
+  </button>
+  {errors.password && <p className="text-red-600 text-sm mt-1">{errors.password}</p>}
+</div>
 
-         
-          <div>
-            <label className="block text-sm font-medium mb-1">Confirm Password</label>
-            <input
-              type="password"
-              name="confirmPassword"
-              placeholder="Re-enter your password"
-              className="w-full border border-gray-300 rounded px-4 py-2 text-sm focus:outline-none"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              required
-            />
-            {errors.confirmPassword && <p className="text-red-600 text-sm mt-1">{errors.confirmPassword}</p>}
-          </div>
+{/* Confirm Password Field */}
+<div className="relative mt-4">
+  <label className="block text-sm font-medium mb-1">Confirm Password</label>
+  <input
+    type={showConfirmPassword ? "text" : "password"}
+    name="confirmPassword"
+    placeholder="Re-enter your password"
+    className="w-full border border-gray-300 rounded px-4 py-2 text-sm focus:outline-none pr-10"
+    value={formData.confirmPassword}
+    onChange={handleChange}
+    required
+  />
+  <button
+    type="button"
+    className="absolute right-2 top-8 text-sm text-gray-500"
+    onClick={() => setShowConfirmPassword(prev => !prev)}
+  >
+    {showConfirmPassword ? "Hide" : "Show"}
+  </button>
+  {errors.confirmPassword && <p className="text-red-600 text-sm mt-1">{errors.confirmPassword}</p>}
+</div>
 
          
           <button
