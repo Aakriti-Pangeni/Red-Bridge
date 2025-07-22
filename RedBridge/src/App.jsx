@@ -26,6 +26,7 @@ import FindDonorWithRequest from './pages/findrequest';
 import OtpConfirmationPage from './auth/otpgen'
 import ScrollToTop from './components/service/scrolltop';
 import { ToastContainer } from 'react-toastify';
+import EditProfile from './pages/editprofile'
 
 
 function App() {
@@ -57,6 +58,7 @@ function App() {
           <Route path='/donorprofile' element={<DonorProfile/>} />
           <Route path='/findrequest' element={<FindDonorWithRequest/>} />
           <Route path='/otpgen' element={<OtpConfirmationPage/>} />
+          <Route path='/editprofile/:id' element={<EditProfile/>} />
           
 
          

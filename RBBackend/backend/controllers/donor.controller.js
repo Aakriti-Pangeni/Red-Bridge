@@ -135,19 +135,44 @@ export const getDonorById = async (req, res) => {
 };
 
 // UPDATE DONOR
+// export const updateDonor = async (req, res) => {
+//   const { id } = req.params;
+//   const updateData = req.body;
+
+//   try {
+//     const donor = await Donor.findByIdAndUpdate(id, updateData, { new: true });
+//     if (!donor) return res.status(404).json({ error: "Donor not found" });
+//     res.json(donor);
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ error: "Error updating donor" });
+//   }
+// };
+
+
+
 export const updateDonor = async (req, res) => {
   const { id } = req.params;
-  const updateData = req.body;
+  const { phone, address, lastDonation } = req.body; // ✅ extract explicitly
 
   try {
-    const donor = await Donor.findByIdAndUpdate(id, updateData, { new: true });
+    const donor = await Donor.findById(id);
     if (!donor) return res.status(404).json({ error: "Donor not found" });
+
+    // ✅ Update only the allowed fields
+    if (phone) donor.phone = phone;
+    if (address) donor.address = address;
+    if (lastDonation !== undefined) donor.lastDonation = lastDonation;
+
+    await donor.save();
     res.json(donor);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Error updating donor" });
   }
 };
+
+
 
 // DELETE DONOR
 export const deleteDonor = async (req, res) => {
@@ -162,18 +187,6 @@ export const deleteDonor = async (req, res) => {
   }
 };
 
-// GET DONOR PROFILE BY USER ID
-// export const getDonorProfile = async (req, res) => {
-//   const { id } = req.params;
-//   try {
-//     const donor = await Donor.findOne({ user: id }).populate("user");
-//     if (!donor) return res.status(404).json({ message: "Donor not found" });
-//     res.json(donor);
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).json({ message: "Error fetching donor" });
-//   }
-// };
 
 
 export const getDonorProfile = async (req, res) => {
