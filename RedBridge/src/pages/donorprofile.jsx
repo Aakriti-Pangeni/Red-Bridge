@@ -70,17 +70,17 @@ import { NavLink } from "react-router-dom";
 import MainLayout from "../shared/sidebar/mainlayout";
 
 const DonorProfile = () => {
-  // const { id } = useParams(); // get donor ID from URL
+  const { id } = useParams(); // get donor ID from URL
   const navigate = useNavigate();
   const [donor, setDonor] = useState(null);
 
-  let id= "687dd2bc10825d008a9e64d2";
+  // let id= "687dd2bc10825d008a9e64d2";
   console.log("donor id", id);
   useEffect(() => {
   
     const fetchDonor = async () => {
       try {
-        const res = await fetch(`http://localhost:4000/donor/${id}`,);
+        const res = await fetch(`http://localhost:4000/donor/profile/${id}`,);
         if (!res.ok) throw new Error("Failed to fetch donor");
         console.log("res", res)
         const data = await res.json();

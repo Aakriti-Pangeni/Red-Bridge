@@ -5,9 +5,9 @@ import { useNavigate } from "react-router-dom"
 
 const Signup = () => {
   const [formData, setFormData] = useState({
-    userName:'',
+    userName: '',
     email: '',
-    phonenumber:'',
+    phonenumber: '',
     password: '',
     confirmPassword: '',
   })
@@ -23,23 +23,23 @@ const Signup = () => {
   }
 
   const [showPassword, setShowPassword] = useState(false);
-const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
 
   const validate = () => {
     const newErrors = {}
 
-    if(formData.userName.length <= 2){
-      newErrors.userName ="Please enter your Full Name"
+    if (formData.userName.length <= 2) {
+      newErrors.userName = "Please enter your Full Name"
     }
-    
+
     if (!formData.email.includes('@')) {
       newErrors.email = 'Please enter a valid email'
     }
-    
-        if(formData.phonenumber.length != 10){
-          newErrors.phonenumber ="Phone Number must be 10 digits"
-        }
+
+    if (formData.phonenumber.length != 10) {
+      newErrors.phonenumber = "Phone Number must be 10 digits"
+    }
 
     if (formData.password.length < 8) {
       newErrors.password = 'Password must be at least 8 characters'
@@ -53,64 +53,64 @@ const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     return Object.keys(newErrors).length === 0
   }
 
- const handleSubmit = async (event) => {
-  event.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
 
-  if (!validate()) return;
+    if (!validate()) return;
 
-  try {
-    const { userName, email, phonenumber, password } = formData;
+    try {
+      const { userName, email, phonenumber, password } = formData;
 
-    const res = await fetch("http://localhost:4000/user/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ userName, email, phonenumber, password })
-    });
+      const res = await fetch("http://localhost:4000/user/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userName, email, phonenumber, password })
+      });
 
-    if (!res.ok) throw new Error("Signup failed");
+      if (!res.ok) throw new Error("Signup failed");
 
-    const data = await res.json(); // Should return { user, token }
+      const data = await res.json(); // Should return { user, token }
 
-    // Set cookies like in login
-    const setCookie = (name, value, days = 7) => {
-      const expires = new Date();
-      expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
-      document.cookie = `${name}=${encodeURIComponent(value)};expires=${expires.toUTCString()};path=/;secure;samesite=strict`;
-    };
+      // Set cookies like in login
+      const setCookie = (name, value, days = 7) => {
+        const expires = new Date();
+        expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+        document.cookie = `${name}=${encodeURIComponent(value)};expires=${expires.toUTCString()};path=/;secure;samesite=strict`;
+      };
 
-    if (data.token) setCookie("authToken", data.token);
-    if (data.user) setCookie("userInfo", JSON.stringify(data.user));
+      if (data.token) setCookie("authToken", data.token);
+      if (data.user) setCookie("userInfo", JSON.stringify(data.user));
 
-    // Reset form
-    setFormData({
-      userName: '',
-      email: '',
-      phonenumber: '',
-      password: '',
-      confirmPassword: ''
-    });
+      // Reset form
+      setFormData({
+        userName: '',
+        email: '',
+        phonenumber: '',
+        password: '',
+        confirmPassword: ''
+      });
 
-    setErrors({});
-    alert("User registered successfully!");
+      setErrors({});
+      alert("User registered successfully!");
 
-    // Redirect to homepage
-    window.location.href = "http://localhost:5173/";
-  } catch (err) {
-    console.error("Signup error:", err);
-    alert("There was a problem registering.");
-  }
-};
+      // Redirect to homepage
+      window.location.href = "http://localhost:5173/";
+    } catch (err) {
+      console.error("Signup error:", err);
+      alert("There was a problem registering.");
+    }
+  };
 
 
 
   return (
-   
+
     <section className="flex justify-center items-center  min-h-screen  bg-gray-200 px-4">
-   
+
       <div className="bg-white shadow-md rounded-lg px-8 py-10 mt-5 mb-5 w-full max-w-md">
         <div className="flex flex-col items-center">
-            <img src="/bloodIcon.ico" alt="logo" className=" flex justify-center items-center h-10 w-10" /><span className="mb-3">RedBridge</span> 
-</div>
+          <img src="/bloodIcon.ico" alt="logo" className=" flex justify-center items-center h-10 w-10" /><span className="mb-3">RedBridge</span>
+        </div>
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <h2 className="text-2xl font-bold mb-6 text-center text-red-900">Create Account</h2>
@@ -143,7 +143,7 @@ const [showConfirmPassword, setShowConfirmPassword] = useState(false);
             {errors.email && <p className="text-red-600 text-sm mt-1">{errors.email}</p>}
           </div>
 
-           <div>
+          <div>
             <label className="block text-sm font-medium mb-1">Phone Number</label>
             <input
               type="tel"
@@ -158,51 +158,51 @@ const [showConfirmPassword, setShowConfirmPassword] = useState(false);
           </div>
 
 
-          
+
           <div className="relative">
-  <label className="block text-sm font-medium mb-1">Password</label>
-  <input
-    type={showPassword ? "text" : "password"}
-    name="password"
-    placeholder="Create a password"
-    className="w-full border border-gray-300 rounded px-4 py-2 text-sm focus:outline-none pr-10"
-    value={formData.password}
-    onChange={handleChange}
-    required
-  />
-  <button
-    type="button"
-    className="absolute right-2 top-8 text-sm text-gray-500"
-    onClick={() => setShowPassword(prev => !prev)}
-  >
-    {showPassword ? "Hide" : "Show"}
-  </button>
-  {errors.password && <p className="text-red-600 text-sm mt-1">{errors.password}</p>}
-</div>
+            <label className="block text-sm font-medium mb-1">Password</label>
+            <input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              placeholder="Create a password"
+              className="w-full border border-gray-300 rounded px-4 py-2 text-sm focus:outline-none pr-10"
+              value={formData.password}
+              onChange={handleChange}
+              required
+            />
+            <button
+              type="button"
+              className="absolute right-2 top-8 text-sm text-gray-500"
+              onClick={() => setShowPassword(prev => !prev)}
+            >
+              {showPassword ? "Hide" : "Show"}
+            </button>
+            {errors.password && <p className="text-red-600 text-sm mt-1">{errors.password}</p>}
+          </div>
 
-{/* Confirm Password Field */}
-<div className="relative mt-4">
-  <label className="block text-sm font-medium mb-1">Confirm Password</label>
-  <input
-    type={showConfirmPassword ? "text" : "password"}
-    name="confirmPassword"
-    placeholder="Re-enter your password"
-    className="w-full border border-gray-300 rounded px-4 py-2 text-sm focus:outline-none pr-10"
-    value={formData.confirmPassword}
-    onChange={handleChange}
-    required
-  />
-  <button
-    type="button"
-    className="absolute right-2 top-8 text-sm text-gray-500"
-    onClick={() => setShowConfirmPassword(prev => !prev)}
-  >
-    {showConfirmPassword ? "Hide" : "Show"}
-  </button>
-  {errors.confirmPassword && <p className="text-red-600 text-sm mt-1">{errors.confirmPassword}</p>}
-</div>
+          {/* Confirm Password Field */}
+          <div className="relative mt-4">
+            <label className="block text-sm font-medium mb-1">Confirm Password</label>
+            <input
+              type={showConfirmPassword ? "text" : "password"}
+              name="confirmPassword"
+              placeholder="Re-enter your password"
+              className="w-full border border-gray-300 rounded px-4 py-2 text-sm focus:outline-none pr-10"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              required
+            />
+            <button
+              type="button"
+              className="absolute right-2 top-8 text-sm text-gray-500"
+              onClick={() => setShowConfirmPassword(prev => !prev)}
+            >
+              {showConfirmPassword ? "Hide" : "Show"}
+            </button>
+            {errors.confirmPassword && <p className="text-red-600 text-sm mt-1">{errors.confirmPassword}</p>}
+          </div>
 
-         
+
           <button
             type="submit"
             className="w-full bg-red-900 hover:bg-red-800 text-white font-medium py-2 rounded"
@@ -213,11 +213,11 @@ const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
         <p className="text-center text-sm mt-4">
           Already have an account? <NavLink to={"/login"} className="hover:text-cyan-500 transition-colors hover:underline text-blue-600">Login</NavLink>
-          
+
         </p>
       </div>
-      </section>
- 
+    </section>
+
   )
 }
 
