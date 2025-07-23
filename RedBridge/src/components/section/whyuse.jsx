@@ -21,7 +21,7 @@ const WhyUse = () => {
         <img
           src="./src/assets/img/whyuse.jpg"
           alt="Blood donation"
-          className="shadow-lg rounded-xl w-auto h-auto "
+          className="shadow-lg rounded-xl w-auto h-auto"
         />
       </div>
     </section>

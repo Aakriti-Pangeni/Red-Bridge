@@ -353,7 +353,7 @@ const handleSubmit = async (event) => {
     toast.success("Registration successful!");
 
     // ✅ Redirect to home (logged in)
-    window.location.href = "http://localhost:5173/";
+    window.location.href = "http://localhost:5173/login";
   } catch (err) {
     console.error("Donor registration error:", err);
     toast.error("There was a problem registering. Please try again.");

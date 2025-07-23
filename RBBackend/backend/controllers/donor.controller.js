@@ -4,6 +4,7 @@ import Donor from "../models/donor.model.js";
 import User from "../models/user.model.js";
 import getCoordinates from "../utils/geocode.js";
 import bcrypt from "bcryptjs";
+import sendSMS from '../utils/sendSms.js';
 
 // CREATE DONOR
 export const createDonor = async (req, res) => {
@@ -134,21 +135,6 @@ export const getDonorById = async (req, res) => {
   }
 };
 
-// UPDATE DONOR
-// export const updateDonor = async (req, res) => {
-//   const { id } = req.params;
-//   const updateData = req.body;
-
-//   try {
-//     const donor = await Donor.findByIdAndUpdate(id, updateData, { new: true });
-//     if (!donor) return res.status(404).json({ error: "Donor not found" });
-//     res.json(donor);
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).json({ error: "Error updating donor" });
-//   }
-// };
-
 
 
 export const updateDonor = async (req, res) => {
@@ -186,6 +172,73 @@ export const deleteDonor = async (req, res) => {
     res.status(500).json({ error: "Error deleting donor" });
   }
 };
+
+
+
+//////
+
+export const requestDonor = async (req, res) => {
+  // const { id } = req.body;
+
+  const { donorId } = req.body;
+
+  try {
+    // Fetch donor info by ID
+
+
+    // const donor = await Donor.findById( id );
+const donor = await Donor.findById(donorId);
+
+    if (!donor) {
+      return res.status(404).json({ error: "Donor not found" });
+    }
+
+    // Get requester name from logged-in user (assumes authentication middleware adds req.user)
+    const requesterName = req.user?.userName || "Someone";
+     
+    const number = req.user?.phone;
+console.log("Logged in as:", requesterName);
+    // Message to send
+    const message = `Hello! ${requesterName} is requesting blood. Please contact  them in this number ${number} if you’re available to donate.`;
+
+    // Send SMS to donor's phone
+    await sendSMS(donor.phone, message);
+  
+
+    res.status(200).json({ message: "SMS sent to donor!" });
+  } catch (err) {
+    console.error("Request Donor Error:", err.message);
+    res.status(500).json({ error: "Failed to send request." });
+  }
+};
+
+
+
+
+
+//  export const requestDonor = async (req, res) => {
+//   try {
+//     const { donorId } = req.params;
+//     console.log("Requesting donor with ID:", donorId);
+
+//     // Get donor info from DB
+//     const donor = await Donor.findById(donorId);
+//     if (!donor) return res.status(404).json({ message: "Donor not found" });
+
+//     const message = `Hello ${donor.name}, someone is in need of your blood group (${donor.bloodGroup}). Please contact if available.`;
+    
+//     await sendSMS(donor.phone, message); // Pass raw number like "9843738801"
+
+//     res.status(200).json({ message: "SMS request sent successfully" });
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ message: "Failed to send SMS" });
+//   }
+// };
+
+
+
+//////
 
 
 

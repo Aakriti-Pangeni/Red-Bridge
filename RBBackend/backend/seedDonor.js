@@ -61,7 +61,7 @@ function getRandomLastDonation() {
 
 async function seedDonors() {
   try {
-    await Donor.deleteMany(); // Remove old donors
+   
 
     const fakeUserId = new mongoose.Types.ObjectId(); // or use real user _id
     const donorArray = [];
@@ -69,7 +69,8 @@ async function seedDonors() {
     for (let i = 0; i < 100; i++) {
       const name = getNepaliFullName();
       const email = faker.internet.email({ firstName: name.split(" ")[0] }).toLowerCase();
-      const phone = faker.phone.number('98########');
+      const phone = '98' + faker.string.numeric(8);
+
       const dob = faker.date.birthdate({ min: 18, max: 60, mode: 'age' }).toISOString().split('T')[0];
       const gender = faker.helpers.arrayElement(['Male', 'Female', 'Other']);
       const bloodGroup = faker.helpers.arrayElement(bloodGroups);

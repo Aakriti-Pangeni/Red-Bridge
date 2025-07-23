@@ -24,6 +24,8 @@ import DonorCheckList from './auth/checklist'
 import ForgotPassword from './auth/forgotpassword'
 import FindDonorWithRequest from './pages/findrequest';
 import OtpConfirmationPage from './auth/otpgen'
+import VerifyOTP from './auth/verifyotp'
+import ResetPassword from './auth/resetpassword'
 import ScrollToTop from './components/service/scrolltop';
 import { ToastContainer } from 'react-toastify';
 import EditProfile from './pages/editprofile'
@@ -55,6 +57,8 @@ function App() {
           <Route path='/checklist' element={<DonorCheckList/>} />
           <Route path='/finddonor' element={<FindDonor/>} />
           <Route path='/forgotpassword' element={<ForgotPassword/>} />
+          <Route path='/verify-otp' element={<VerifyOTP/>} />
+          <Route path='/reset-password' element={<ResetPassword/>} />
           <Route path='/donorprofile' element={<DonorProfile/>} />
           <Route path='/findrequest' element={<FindDonorWithRequest/>} />
           <Route path='/otpgen' element={<OtpConfirmationPage/>} />

@@ -2,6 +2,7 @@ import React, { useState } from "react"
 import Login from "./login"
 import { NavLink } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
+import { toast, ToastContainer } from "react-toastify"
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -89,15 +90,15 @@ const Signup = () => {
         password: '',
         confirmPassword: ''
       });
-
+<ToastContainer/>
       setErrors({});
-      alert("User registered successfully!");
+      toast.success("User registered successfully!");
 
       // Redirect to homepage
       window.location.href = "http://localhost:5173/";
     } catch (err) {
       console.error("Signup error:", err);
-      alert("There was a problem registering.");
+      toast.error("There was a problem registering.");
     }
   };
 
