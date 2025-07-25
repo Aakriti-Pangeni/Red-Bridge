@@ -5,9 +5,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, activeTab, setActiveTab }) => {
   const sidebarItems = [
     { id: 'dashboard', label: 'Dashboard', icon: Home },
     { id: 'donors', label: 'Donors', icon: Users },
-    { id: 'receivers', label: 'Receivers', icon: Heart },
-    { id: 'requests', label: 'Blood Requests', icon: Activity },
-    { id: 'settings', label: 'Settings', icon: Settings },
+    { id: 'users', label: 'Users', icon: Heart },
+   
   ];
 
   return (

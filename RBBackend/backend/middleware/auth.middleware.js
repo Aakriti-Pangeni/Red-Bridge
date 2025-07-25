@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import User from '../models/user.model.js';
-import user from '../controllers/user.controllers.js';
+// import User from '../controllers/user.controllers.js';
 
 const authMiddleware = async (req, res, next) => {
   const authHeader = req.headers.authorization;
@@ -10,7 +10,10 @@ const authMiddleware = async (req, res, next) => {
       const token = authHeader.split(' ')[1];
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-      req.user = await User.findById(decoded.userId).select('-password');
+      const user = await User.findById(decoded.userId).select('-password');
+      console.log('Authenticated User:', user); // 👈 Add this line
+
+      req.user = user;
 
       next();
     } catch (error) {
@@ -21,4 +24,4 @@ const authMiddleware = async (req, res, next) => {
   }
 };
 
-export default authMiddleware;
+export default authMiddleware;  

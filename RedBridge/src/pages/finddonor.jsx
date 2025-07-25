@@ -168,9 +168,51 @@ const FindDonor = () => {
 
   const filteredDonors = knnDonors();
 <ToastContainer/>
- const handleRequest = async (donor) => {
+//  const handleRequest = async (donor) => {
+//   try {
+//     const token = getCookie("token"); // or whatever your cookie name is for JWT
+//     const response = await fetch("http://localhost:4000/donor/request", {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json",
+//         ...(token && { Authorization: `Bearer ${token}` }),
+//       },
+//       body: JSON.stringify({ donorId: donor._id }),
+//     });
+
+//     // const result = await response.json();
+
+//     let result;
+// try {
+//   result = await response.json();
+// } catch (err) {
+//   result = { error: "Invalid response from server." };
+// }
+
+
+//     if (response.ok) {
+//       toast.success("Request sent successfully!");
+//     } else {
+//       toast.error(result.error || "Failed to send request.");
+//     }
+//   } catch (err) {
+//     console.error("Request Error:", err);
+//     toast.error("Something went wrong while sending request.");
+//   }
+// };
+
+
+
+const handleRequest = async (donor) => {
   try {
-    const token = getCookie("token"); // or whatever your cookie name is for JWT
+    // const cookie = getCookie("userInfo");
+    // const token = cookie ? JSON.parse(decodeURIComponent(cookie)).token : null;
+
+
+    const token = getCookie("authToken");
+
+    // const token = localStorage.getItem("token");
+
     const response = await fetch("http://localhost:4000/donor/request", {
       method: "POST",
       headers: {
@@ -180,15 +222,12 @@ const FindDonor = () => {
       body: JSON.stringify({ donorId: donor._id }),
     });
 
-    // const result = await response.json();
-
     let result;
-try {
-  result = await response.json();
-} catch (err) {
-  result = { error: "Invalid response from server." };
-}
-
+    try {
+      result = await response.json();
+    } catch (err) {
+      result = { error: "Invalid response from server." };
+    }
 
     if (response.ok) {
       toast.success("Request sent successfully!");
@@ -264,7 +303,7 @@ try {
               {filteredDonors.length > 0 ? (
                 filteredDonors.map((donor, index) => (
                   <tr
-                    key={donor.id}
+                    key={donor._id || index}
                     className={`${index % 2 === 0 ? "bg-gray-100" : "bg-white"}`}
                   >
                     <td className="p-2 text-center border">{index + 1}.</td>

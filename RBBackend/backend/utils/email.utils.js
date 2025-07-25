@@ -1,5 +1,7 @@
 import nodemailer from "nodemailer";
 import User from '../models/user.model.js';
+import { requestDonor } from "../controllers/donor.controller.js";
+import middleware from "../middleware/auth.middleware.js";
 
 // Configure nodemailer transporter
 const transporter = nodemailer.createTransport({
@@ -266,5 +268,54 @@ export const sendContactEmail = async (options) => {
     } catch (error) {
         console.error('Error sending contact form email:', error);
         throw error;
+    }
+};
+
+
+
+export const sendDonorRequestEmail = async ({ donorEmail, donorName, requesterName, requesterPhone }) => {
+    try {
+        const mailOptions = 
+        {
+            from: `"RedBridge Blood Bank" <${process.env.EMAIL_USER}>`,
+            to: donorEmail,
+            subject: `Blood Donation Request from ${requesterName}`,
+            html: `
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f9f9;">
+                    <div style="background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                        <div style="text-align: center; margin-bottom: 30px;">
+                            <h1 style="color: #dc2626; margin: 0;">RedBridge</h1>
+                            <p style="color: #666; margin: 5px 0;">Blood Donor Finding System</p>
+                        </div>
+
+                        <h2 style="color: #333;">Hi ${donorName || 'Donor'},</h2>
+                        <p style="color: #666; line-height: 1.6;">
+                            ${requesterName} is requesting a blood donation. If you're available and willing, please reach out.
+                        </p>
+
+                        <div style="margin: 20px 0; padding: 15px; background-color: #fef2f2; border-left: 4px solid #dc2626; border-radius: 8px;">
+                            <p><strong>Requester Name:</strong> ${requesterName}</p>
+                            <p><strong>Contact Number:</strong> ${requesterPhone}</p>
+                        </div>
+
+                        <p style="color: #666;">Thank you for being a life-saver!</p>
+
+                        <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; text-align: center;">
+                            <p style="color: #999; font-size: 14px;">
+                                The RedBridge Team
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            `,
+        };
+
+
+     
+
+        const info = await transporter.sendMail(mailOptions);
+        console.log(`Donor request email sent to ${donorEmail}. MessageId: %s`, info.messageId);
+    } catch (error) {
+        console.error('Error sending donor request email:', error);
     }
 };

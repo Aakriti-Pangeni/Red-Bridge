@@ -3,7 +3,8 @@ import Sidebar from '../shared/sidebar';
 import Header from '../shared/header';
 import DashboardPage from '../pages/dashboardpage';
 import DonorsPage from '../pages/donorspage';
-import ReceiversPage from '../pages/receiverspage';
+import UsersPage from '../pages/userspage'; 
+
 
 
 
@@ -17,8 +18,9 @@ const BloodDonorDashboard = () => {
         return <DashboardPage />;
       case 'donors':
         return <DonorsPage />;
-      case 'receivers':
-        return <ReceiversPage />;
+        
+      case 'Users':
+        return <UsersPage />;
      
       default:
         return <DashboardPage />;

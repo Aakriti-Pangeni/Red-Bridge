@@ -26,55 +26,114 @@ const Login = () => {
     document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/;secure;samesite=strict`
   }
 
+  // const handleSubmit = async (event) => {
+  //   event.preventDefault()
+  //   setLoading(true)
+  //   setError('')
+
+  //   try {
+  //     // Replace with your actual backend URL
+  //     const response = await fetch('http://localhost:4000/user/login', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({
+  //         email: formData.email,
+  //         password: formData.password
+  //       }),
+  //     })
+
+  //     const data = await response.json()
+
+  //     if (response.ok) {
+  //       // Store token in cookie
+  //       setCookie('authToken', data.token, 7) // Token expires in 7 days
+        
+  //       // Store user info if provided
+  //       if (data.user) {
+  //         setCookie('userInfo', JSON.stringify(data.user), 7)
+  //       }
+
+  //       // Reset form
+  //       setFormData({ email: '', password: '' })
+        
+  //       // Redirect to dashboard or home page
+  //       window.location.href = 'http://localhost:5173/' // Change this to your desired route
+        
+  //       // Show success message (optional)
+  //       console.log('Login successful:', data.message)
+        
+  //     } else {
+  //       // Handle error response
+  //       setError(data.message || 'Login failed. Please try again.')
+  //     }
+  //   } catch (err) {
+  //     console.error('Login error:', err)
+  //     setError('Network error. Please check your connection and try again.')
+  //   } finally {
+  //     setLoading(false)
+  //   }
+  // }
+
+
   const handleSubmit = async (event) => {
-    event.preventDefault()
-    setLoading(true)
-    setError('')
+  event.preventDefault()
+  setLoading(true)
+  setError('')
 
-    try {
-      // Replace with your actual backend URL
-      const response = await fetch('http://localhost:4000/user/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: formData.email,
-          password: formData.password
-        }),
-      })
+  try {
+    const response = await fetch('http://localhost:4000/user/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: formData.email,
+        password: formData.password
+      }),
+    })
 
-      const data = await response.json()
 
-      if (response.ok) {
-        // Store token in cookie
-        setCookie('authToken', data.token, 7) // Token expires in 7 days
-        
-        // Store user info if provided
-        if (data.user) {
-          setCookie('userInfo', JSON.stringify(data.user), 7)
-        }
+    ///
+// localStorage.setItem("token", data.token);
+////
 
-        // Reset form
-        setFormData({ email: '', password: '' })
-        
-        // Redirect to dashboard or home page
-        window.location.href = 'http://localhost:5173/' // Change this to your desired route
-        
-        // Show success message (optional)
-        console.log('Login successful:', data.message)
-        
-      } else {
-        // Handle error response
-        setError(data.message || 'Login failed. Please try again.')
+
+    const data = await response.json()
+
+    if (response.ok) {
+      // Store token in cookie
+      setCookie('authToken', data.token, 7)
+
+      // Store user info if provided
+      if (data.user) {
+        setCookie('userInfo', JSON.stringify(data.user), 7)
       }
-    } catch (err) {
-      console.error('Login error:', err)
-      setError('Network error. Please check your connection and try again.')
-    } finally {
-      setLoading(false)
+
+      // Reset form
+      setFormData({ email: '', password: '' })
+
+      // ✅ Redirect based on role
+      if (data.user && data.user.role === 'admin') {
+        window.location.href = 'http://localhost:5174/'
+      } else {
+        window.location.href = 'http://localhost:5173/'
+      }
+
+      // Optional success message
+      console.log('Login successful:', data.message)
+    } else {
+      setError(data.message || 'Login failed. Please try again.')
     }
+  } catch (err) {
+    console.error('Login error:', err)
+    setError('Network error. Please check your connection and try again.')
+  } finally {
+    setLoading(false)
   }
+}
+
 
   return (
     <section className="flex justify-center items-center min-h-screen bg-gray-200 px-4">

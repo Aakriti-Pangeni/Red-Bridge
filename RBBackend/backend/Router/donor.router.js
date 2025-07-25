@@ -23,7 +23,7 @@ router.get('/:id', getDonorById);
 router.put('/:id', updateDonor);
 router.delete('/:id', deleteDonor);
 router.get("/profile/:id", getDonorProfile);
-router.post('/request/', requestDonor);
+router.post('/request', requestDonor);
 // router.get("/:id", getDonorProfile);
-
+router.post('/request', authMiddleware,  requestDonor);
 export default router;

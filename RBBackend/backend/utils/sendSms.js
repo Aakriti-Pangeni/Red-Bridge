@@ -37,7 +37,7 @@ const sendSMS = async (to, message) => {
 
     // Validate phone format
     if (!/^\d{10}$/.test(to)) {
-      throw new Error(`Invalid Nepali phone number: "${to}". It must be 10 digits like 984XXXXXXX.`);
+      throw new Error(`Invalid phone number: "${to}". It must be 10 digits like 984XXXXXXX.`);
     }
 
     // Format to international E.164 for Nepal (+977)

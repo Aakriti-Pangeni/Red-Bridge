@@ -5,6 +5,9 @@ import User from "../models/user.model.js";
 import getCoordinates from "../utils/geocode.js";
 import bcrypt from "bcryptjs";
 import sendSMS from '../utils/sendSms.js';
+// import sendEmail from '../utils/email.utils.js';
+import { sendDonorRequestEmail } from '../utils/email.utils.js';
+// import user from './user.controllers.js';
 
 // CREATE DONOR
 export const createDonor = async (req, res) => {
@@ -177,40 +180,40 @@ export const deleteDonor = async (req, res) => {
 
 //////
 
-export const requestDonor = async (req, res) => {
-  // const { id } = req.body;
+// export const requestDonor = async (req, res) => {
+//   // const { id } = req.body;
 
-  const { donorId } = req.body;
+//   const { donorId } = req.body;
 
-  try {
-    // Fetch donor info by ID
+//   try {
+//     // Fetch donor info by ID
 
 
-    // const donor = await Donor.findById( id );
-const donor = await Donor.findById(donorId);
+//     // const donor = await Donor.findById( id );
+// const donor = await Donor.findById(donorId);
 
-    if (!donor) {
-      return res.status(404).json({ error: "Donor not found" });
-    }
+//     if (!donor) {
+//       return res.status(404).json({ error: "Donor not found" });
+//     }
 
-    // Get requester name from logged-in user (assumes authentication middleware adds req.user)
-    const requesterName = req.user?.userName || "Someone";
+//     // Get requester name from logged-in user (assumes authentication middleware adds req.user)
+//     const requesterName = req.user?.userName || "Someone";
      
-    const number = req.user?.phone;
-console.log("Logged in as:", requesterName);
-    // Message to send
-    const message = `Hello! ${requesterName} is requesting blood. Please contact  them in this number ${number} if you’re available to donate.`;
+//     const number = req.user?.phone;
+// console.log("Logged in as:", requesterName);
+//     // Message to send
+//     const message = `Hello! ${requesterName} is requesting blood. Please contact  them in this number ${number} if you’re available to donate.`;
 
-    // Send SMS to donor's phone
-    await sendSMS(donor.phone, message);
+//     // Send SMS to donor's phone
+//     await sendSMS(donor.phone, message);
   
 
-    res.status(200).json({ message: "SMS sent to donor!" });
-  } catch (err) {
-    console.error("Request Donor Error:", err.message);
-    res.status(500).json({ error: "Failed to send request." });
-  }
-};
+//     res.status(200).json({ message: "SMS sent to donor!" });
+//   } catch (err) {
+//     console.error("Request Donor Error:", err.message);
+//     res.status(500).json({ error: "Failed to send request." });
+//   }
+// };
 
 
 
@@ -239,6 +242,49 @@ console.log("Logged in as:", requesterName);
 
 
 //////
+
+
+
+
+export const requestDonor = async (req, res) => {
+  const { donorId } = req.body;
+
+  try {
+    const donor = await Donor.findById(donorId);
+    if (!donor) {
+      return res.status(404).json({ error: "Donor not found" });
+    }
+
+    const requesterName = req.user?.userName || "Someone";
+    const requesterPhone = req.user?.phone || "Unknown";
+
+    // SMS message
+    const smsMessage = `Hello! ${requesterName} is requesting blood. Please contact them at ${requesterPhone} if you’re available to donate.`;
+    await sendSMS(donor.phone, smsMessage);
+
+    // Email message
+    // const emailSubject = "Urgent Blood Donation Request";
+    const emailHtml = `
+      <p>Dear ${donor.name},</p>
+      <p>${requesterName} is requesting <strong>${donor.bloodGroup}</strong> blood.</p>
+      <p>Contact Number: ${requesterPhone}</p>
+      <p>Please respond if you’re available. Thank you!</p>
+      <p>- RedBridge Team</p>
+    `;
+       await sendDonorRequestEmail({
+      donorEmail: donor.email,
+      donorName: donor.name,
+      requesterName,
+      requesterPhone,
+      emailHtml, // if your function accepts it directly
+    });
+
+    res.status(200).json({ message: "SMS and Email sent to donor!" });
+  } catch (err) {
+    console.error("Request Donor Error:", err.message);
+    res.status(500).json({ error: "Failed to send request." });
+  }
+};
 
 
 
