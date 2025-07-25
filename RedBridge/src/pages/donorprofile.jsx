@@ -33,8 +33,8 @@ const DonorProfile = () => {
       parsed = null;
     }
     // console.log("Donor ID from cookie:", parsed?.id);
-    if (parsed && parsed.id) {
-      setDonorId(parsed.id);
+    if (parsed && parsed._id) {
+      setDonorId(parsed._id);
     }
   }, []);
 

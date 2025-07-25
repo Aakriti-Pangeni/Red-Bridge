@@ -10,8 +10,8 @@ const authMiddleware = async (req, res, next) => {
       const token = authHeader.split(' ')[1];
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-      const user = await User.findById(decoded.userId).select('-password');
-      console.log('Authenticated User:', user); // 👈 Add this line
+      const user = await User.findById(decoded.userId).select('-password -otp -otpExpiry');
+      
 
       req.user = user;
 

@@ -19,6 +19,7 @@ const BloodDonorDashboard = () => {
       case 'donors':
         return <DonorsPage />;
         
+        case 'users':
       case 'Users':
         return <UsersPage />;
      

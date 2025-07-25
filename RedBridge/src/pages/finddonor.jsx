@@ -8,8 +8,8 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify"; 
 
 const getCookie = (name) => {
-  const value =  `${document.cookie}`;
-  const parts = value.split(`${name}=`);
+  const value = `; ${document.cookie}`;  // ✅ Add "; " prefix
+  const parts = value.split(`; ${name}=`);  // ✅ Add "; " here too
   if (parts.length === 2) return parts.pop().split(";").shift();
   return null;
 };
@@ -203,21 +203,73 @@ const FindDonor = () => {
 
 
 
+// const handleRequest = async (donor) => {
+//   try {
+//     // const cookie = getCookie("userInfo");
+//     // const token = cookie ? JSON.parse(decodeURIComponent(cookie)).token : null;
+
+
+//     const token = getCookie("authToken");
+
+//     // const token = localStorage.getItem("token");
+
+//     const response = await fetch("http://localhost:4000/donor/request", {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json",
+//         ...(token && { Authorization: `Bearer ${token}` }),
+//       },
+//       body: JSON.stringify({ donorId: donor._id }),
+//     });
+
+//     let result;
+//     try {
+//       result = await response.json();
+//     } catch (err) {
+//       result = { error: "Invalid response from server." };
+//     }
+
+//     if (response.ok) {
+//       toast.success("Request sent successfully!");
+//     } else {
+//       toast.error(result.error || "Failed to send request.");
+//     }
+//   } catch (err) {
+//     console.error("Request Error:", err);
+//     toast.error("Something went wrong while sending request.");
+//   }
+// };
+
+
 const handleRequest = async (donor) => {
   try {
-    // const cookie = getCookie("userInfo");
-    // const token = cookie ? JSON.parse(decodeURIComponent(cookie)).token : null;
+    // Get the userInfo cookie and extract the token from it
+    const cookie = getCookie("userInfo");
+    let token = null;
+    
+    if (cookie) {
+      try {
+        const parsed = JSON.parse(cookie);
+        console.log("Parsed user info:", parsed); // Debug log
+        
+        // ✅ Get token from authToken cookie instead
+        token = getCookie("authToken");
+        console.log("Token from authToken cookie:", token); // Debug log
+      } catch (err) {
+        console.error("Error parsing userInfo cookie:", err);
+      }
+    }
 
-
-    const token = getCookie("authToken");
-
-    // const token = localStorage.getItem("token");
+    if (!token) {
+      toast.error("Please log in to send a request.");
+      return;
+    }
 
     const response = await fetch("http://localhost:4000/donor/request", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        ...(token && { Authorization: `Bearer ${token}` }),
+        Authorization: `Bearer ${token}`, // Use the extracted token
       },
       body: JSON.stringify({ donorId: donor._id }),
     });
@@ -239,7 +291,6 @@ const handleRequest = async (donor) => {
     toast.error("Something went wrong while sending request.");
   }
 };
-
 
   return (
     <MainLayout>

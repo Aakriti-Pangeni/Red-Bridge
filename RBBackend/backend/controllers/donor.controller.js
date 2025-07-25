@@ -96,7 +96,7 @@ export const getAllDonors = async (req, res) => {
   }
 };
 
-// SEARCH DONORS
+
 export const searchDonors = async (req, res) => {
   const { bloodGroup, lat, lng } = req.query;
 
@@ -113,7 +113,7 @@ export const searchDonors = async (req, res) => {
             type: "Point",
             coordinates: [parseFloat(lng), parseFloat(lat)],
           },
-          $maxDistance: 10000, // within 10 km
+          $maxDistance: 10000,
         },
       },
     }).populate("user");
@@ -125,7 +125,7 @@ export const searchDonors = async (req, res) => {
   }
 };
 
-// GET SINGLE DONOR
+
 export const getDonorById = async (req, res) => {
   const { id } = req.params;
   try {
@@ -142,13 +142,13 @@ export const getDonorById = async (req, res) => {
 
 export const updateDonor = async (req, res) => {
   const { id } = req.params;
-  const { phone, address, lastDonation } = req.body; // ✅ extract explicitly
+  const { phone, address, lastDonation } = req.body; 
 
   try {
     const donor = await Donor.findById(id);
     if (!donor) return res.status(404).json({ error: "Donor not found" });
 
-    // ✅ Update only the allowed fields
+    
     if (phone) donor.phone = phone;
     if (address) donor.address = address;
     if (lastDonation !== undefined) donor.lastDonation = lastDonation;
@@ -163,7 +163,6 @@ export const updateDonor = async (req, res) => {
 
 
 
-// DELETE DONOR
 export const deleteDonor = async (req, res) => {
   const { id } = req.params;
   try {
@@ -178,70 +177,7 @@ export const deleteDonor = async (req, res) => {
 
 
 
-//////
 
-// export const requestDonor = async (req, res) => {
-//   // const { id } = req.body;
-
-//   const { donorId } = req.body;
-
-//   try {
-//     // Fetch donor info by ID
-
-
-//     // const donor = await Donor.findById( id );
-// const donor = await Donor.findById(donorId);
-
-//     if (!donor) {
-//       return res.status(404).json({ error: "Donor not found" });
-//     }
-
-//     // Get requester name from logged-in user (assumes authentication middleware adds req.user)
-//     const requesterName = req.user?.userName || "Someone";
-     
-//     const number = req.user?.phone;
-// console.log("Logged in as:", requesterName);
-//     // Message to send
-//     const message = `Hello! ${requesterName} is requesting blood. Please contact  them in this number ${number} if you’re available to donate.`;
-
-//     // Send SMS to donor's phone
-//     await sendSMS(donor.phone, message);
-  
-
-//     res.status(200).json({ message: "SMS sent to donor!" });
-//   } catch (err) {
-//     console.error("Request Donor Error:", err.message);
-//     res.status(500).json({ error: "Failed to send request." });
-//   }
-// };
-
-
-
-
-
-//  export const requestDonor = async (req, res) => {
-//   try {
-//     const { donorId } = req.params;
-//     console.log("Requesting donor with ID:", donorId);
-
-//     // Get donor info from DB
-//     const donor = await Donor.findById(donorId);
-//     if (!donor) return res.status(404).json({ message: "Donor not found" });
-
-//     const message = `Hello ${donor.name}, someone is in need of your blood group (${donor.bloodGroup}). Please contact if available.`;
-    
-//     await sendSMS(donor.phone, message); // Pass raw number like "9843738801"
-
-//     res.status(200).json({ message: "SMS request sent successfully" });
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).json({ message: "Failed to send SMS" });
-//   }
-// };
-
-
-
-//////
 
 
 
@@ -256,10 +192,10 @@ export const requestDonor = async (req, res) => {
     }
 
     const requesterName = req.user?.userName || "Someone";
-    const requesterPhone = req.user?.phone || "Unknown";
+    const requesterPhone = req.user?.phonenumber || "Unknown";
 
     // SMS message
-    const smsMessage = `Hello! ${requesterName} is requesting blood. Please contact them at ${requesterPhone} if you’re available to donate.`;
+    const smsMessage = `Hello! ${donor.name}, ${requesterName} is requesting for blood of bloodgroup ${donor.bloodGroup}. Please contact them at ${requesterPhone} if you’re available to donate.`;
     await sendSMS(donor.phone, smsMessage);
 
     // Email message

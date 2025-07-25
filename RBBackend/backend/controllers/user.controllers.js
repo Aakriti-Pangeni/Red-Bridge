@@ -272,16 +272,27 @@ user.getUser = async (req, res) => {
   }
 };
 
+// user.getAllUsers = async (req, res) => {
+//   try {
+//     const users = await User.find().select("-password -otp -otpExpiry");
+//     res.json(users);
+//   } catch (error) {
+//     console.error('Get All Users Error:', error);
+//     res.status(500).json({ message: 'Something went wrong' });
+//   }
+// };
+
+
 user.getAllUsers = async (req, res) => {
   try {
     const users = await User.find().select("-password -otp -otpExpiry");
-    res.json(users);
+    console.log('Found users:', users.length); // Debug log
+    res.json(users); // Return users directly, not { users }
   } catch (error) {
     console.error('Get All Users Error:', error);
     res.status(500).json({ message: 'Something went wrong' });
   }
 };
-
 
 // export const getAllUsers = async (req, res) => {
 //   try {
