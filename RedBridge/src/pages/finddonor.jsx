@@ -824,51 +824,70 @@ const FindDonor = () => {
     toast.info("Showing all donors");
   };
 
-  const handleRequest = async (donor) => {
-    try {
-      const cookie = getCookie("userInfo");
-      let token = null;
+// ✅ Update the handleRequest function (around line 400)
+const handleRequest = async (donor) => {
+  try {
+    console.log('=== FRONTEND REQUEST DEBUG ===');
+    console.log('Donor details:', {
+      name: donor.name,
+      phone: donor.phone,
+      email: donor.email,
+      bloodGroup: donor.bloodGroup
+    });
+    
+    const cookie = getCookie("userInfo");
+    let token = null;
 
-      if (cookie) {
-        try {
-          const parsed = JSON.parse(cookie);
-          token = getCookie("authToken");
-        } catch (err) {
-          console.error("Error parsing userInfo cookie:", err);
-        }
-      }
-
-      if (!token) {
-        toast.error("Please log in to send a request.");
-        return;
-      }
-
-      const response = await fetch("http://localhost:4000/donor/request", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ donorId: donor._id }),
-      });
-
-      let result;
+    if (cookie) {
       try {
-        result = await response.json();
+        const parsed = JSON.parse(cookie);
+        token = getCookie("authToken");
+        console.log('User info:', parsed);
+        console.log('Token exists:', !!token);
       } catch (err) {
-        result = { error: "Invalid response from server." };
+        console.error("Error parsing userInfo cookie:", err);
       }
-
-      if (response.ok) {
-        toast.success("Request sent successfully!");
-      } else {
-        toast.error(result.error || "Failed to send request.");
-      }
-    } catch (err) {
-      console.error("Request Error:", err);
-      toast.error("Something went wrong while sending request.");
     }
-  };
+
+    if (!token) {
+      toast.error("Please log in to send a request.");
+      return;
+    }
+
+    console.log('Sending request to donor:', donor.name, donor._id);
+
+    const response = await fetch("http://localhost:4000/donor/request", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ 
+        donorId: donor._id,
+        message: `🩸 URGENT: I need ${donor.bloodGroup} blood donation. Please contact me at your earliest convenience if you're available to help. This is a life-saving request. Thank you! - RedBridge`
+      }),
+    });
+
+    console.log('Response status:', response.status);
+
+    let result;
+    try {
+      result = await response.json();
+      console.log('Response data:', result);
+    } catch (err) {
+      result = { error: "Invalid response from server." };
+    }
+
+    if (response.ok) {
+      toast.success("Request sent successfully! The donor has been notified via email and SMS.");
+    } else {
+      toast.error(result.error || "Failed to send request.");
+    }
+  } catch (err) {
+    console.error("Request Error:", err);
+    toast.error("Something went wrong while sending request.");
+  }
+};
 
   return (
     <MainLayout>

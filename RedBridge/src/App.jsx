@@ -29,6 +29,9 @@ import ResetPassword from './auth/resetpassword'
 import ScrollToTop from './components/service/scrolltop';
 import { ToastContainer } from 'react-toastify';
 import EditProfile from './pages/editprofile'
+import UserRequests from './pages/userRequest';
+import DonorRequests from './pages/donorRequests';
+
 
 
 function App() {
@@ -44,6 +47,7 @@ function App() {
           <Route path='/home' element={<Home />} />
           <Route path='/navbar' element={<NavBar/>} />
           <Route path='/welcome' element={<Welcome/>} />
+          
           {/* <Route path='/card' element={<Card/>} /> */}
           <Route path='/whyuse' element={<WhyUse/>} />
           <Route path='/about' element={<About/>} />
@@ -63,7 +67,8 @@ function App() {
           <Route path='/findrequest' element={<FindDonorWithRequest/>} />
           <Route path='/otpgen' element={<OtpConfirmationPage/>} />
           <Route path='/editprofile/:id' element={<EditProfile/>} />
-          
+          <Route path='/donorRequests' element={<DonorRequests />} />
+           <Route path='/userRequests' element={<UserRequests />} />
 
          
         </Routes>

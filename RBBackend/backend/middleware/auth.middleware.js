@@ -13,7 +13,13 @@ const authMiddleware = async (req, res, next) => {
       const user = await User.findById(decoded.userId).select('-password -otp -otpExpiry');
       
 
+      if (!user) {
+        return res.status(401).json({ message: 'User not found' });
+      }
+
+      // ✅ Simple fix: just add the id field
       req.user = user;
+      req.user.id = user._id.toString(); // ✅ Add this line
 
       next();
     } catch (error) {
@@ -25,3 +31,4 @@ const authMiddleware = async (req, res, next) => {
 };
 
 export default authMiddleware;  
+export { authMiddleware as verifyToken };

@@ -42,7 +42,7 @@ const sendSMS = async (to, message) => {
 
     // Format to international E.164 for Nepal (+977)
     const formattedTo = `+977${to}`;
-    console.log("📞 Formatted number:", formattedTo);
+    console.log(" Formatted number:", formattedTo);
 
     const res = await client.messages.create({
       body: message,
@@ -50,9 +50,9 @@ const sendSMS = async (to, message) => {
       to: formattedTo,
     });
 
-    console.log('✅ SMS sent successfully:', res.sid);
+    console.log(' SMS sent successfully:', res.sid);
   } catch (error) {
-    console.error('❌ Failed to send SMS:', {
+    console.error(' Failed to send SMS:', {
       message: error.message,
       code: error.code || 'N/A',
       info: error.moreInfo || 'N/A',

@@ -9,6 +9,7 @@ import adminRouter from './Router/admin.router.js';
 import donorRouter from './Router/donor.router.js';
 import searchRouter from './Router/search.router.js';
 import dashboardRouter from './Router/dashboard.router.js';
+import requestRouter from './Router/request.router.js';
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.use(cors({
 app.use(express.json());
 
 // ✅ Routes
+app.use('/api/requests', requestRouter); 
 app.use('/api', searchRouter); 
 app.use('/search', searchRouter);
 app.use('/admin', adminRouter);

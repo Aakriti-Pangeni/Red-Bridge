@@ -120,7 +120,7 @@ const DashboardPage = () => {
       color: 'bg-yellow-600'
     }
   ];
-  <ToastContainer />
+ 
 
   const handleApprove = async (donorId) => {
     try {
@@ -307,6 +307,7 @@ const DashboardPage = () => {
           </div>
         </div>
       )}
+       <ToastContainer />
     </div>
   );
 };
