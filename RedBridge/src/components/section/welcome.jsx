@@ -17,18 +17,41 @@ const Welcome = () => {
   const [userId, setUserId] = useState(null);
 
   // ✅ Get user ID from cookie (as used in DonorProfile)
-  useEffect(() => {
-    const idFromCookie = getCookie("userInfo");
-    let parsed = null;
-    try {
-      parsed = idFromCookie ? JSON.parse(idFromCookie) : null;
-    } catch (e) {
-      parsed = null;
-    }
-    if (parsed && parsed._id) {
-      setUserId(parsed._id);
-    }
-  }, []);
+  // useEffect(() => {
+  //   const idFromCookie = getCookie("userInfo");
+  //   let parsed = null;
+  //   try {
+  //     parsed = idFromCookie ? JSON.parse(idFromCookie) : null;
+  //   } catch (e) {
+  //     parsed = null;
+  //   }
+  //   if (parsed && parsed._id) {
+  //     setUserId(parsed._id);
+  //   }
+  // }, []);
+
+useEffect(() => {
+  const idFromCookie = getCookie("userInfo");
+  let parsed = null;
+  try {
+    parsed = idFromCookie ? JSON.parse(decodeURIComponent(idFromCookie)) : null;
+  } catch (e) {
+    console.error("Error parsing userInfo cookie:", e);
+    parsed = null;
+  }
+  
+  console.log("Parsed userInfo in Welcome:", parsed); // Debug log
+  
+  // ✅ Check multiple possible ID fields
+  if (parsed && (parsed._id || parsed.id)) {
+    const userId = parsed._id || parsed.id;
+    setUserId(userId);
+    console.log("User ID found:", userId); // Debug log
+  } else {
+    console.log("No user ID found in cookie"); // Debug log
+  }
+}, []);
+
 
   // ✅ Check if user is a registered donor
   useEffect(() => {

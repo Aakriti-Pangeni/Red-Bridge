@@ -71,6 +71,53 @@ user.register = async (req, res) => {
 // };
 
 // LOGIN CONTROLLER
+// user.login = async (req, res) => {
+//   try {
+//     const { email, password } = req.body;
+
+//     // Try to find user in both collections
+//     let userData = await User.findOne({ email });
+//     let role = 'user';
+
+//     if (!userData) {
+//       userData = await Admin.findOne({ email });
+//       role = 'admin';
+//     }
+
+//     if (!userData) return res.status(404).json({ message: "User not found" });
+
+//     // Compare password
+//     const isMatch = await bcrypt.compare(password, userData.password);
+//     if (!isMatch) return res.status(401).json({ message: "Invalid credentials" });
+
+//     // Token payload
+//     const token = jwt.sign({ userId: userData._id, role }, process.env.JWT_SECRET, {
+//       expiresIn: "1h",
+//     });
+
+//     // Send response
+//     res.json({
+//       message: "Login successful",
+//       token,
+//       user: {
+//         _id: userData._id,
+//         userName: userData.userName || userData.name,
+//         email: userData.email,
+//         phonenumber: userData.phonenumber || null,
+//         role
+//       }
+//     });
+
+//   } catch (err) {
+//     console.error("User Login Error:", err);
+//     res.status(500).json({ message: "Something went wrong" });
+//   }
+// };
+
+
+
+// UPDATE your login function (around line 45):
+
 user.login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -95,13 +142,15 @@ user.login = async (req, res) => {
       expiresIn: "1h",
     });
 
-    // Send response
+    // ✅ FIX: Send user data correctly for cookie storage
     res.json({
       message: "Login successful",
       token,
       user: {
-        _id: userData._id,
+        _id: userData._id,        // ✅ This will be at top level in cookie
+        id: userData._id,         // ✅ Also include 'id' for compatibility
         userName: userData.userName || userData.name,
+        name: userData.userName || userData.name, // ✅ Add 'name' field too
         email: userData.email,
         phonenumber: userData.phonenumber || null,
         role
@@ -113,8 +162,6 @@ user.login = async (req, res) => {
     res.status(500).json({ message: "Something went wrong" });
   }
 };
-
-
 
 // OTP GENERATION CONTROLLER
 user.forgotPassword = async (req, res) => {

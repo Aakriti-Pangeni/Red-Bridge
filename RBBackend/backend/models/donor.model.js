@@ -1,5 +1,3 @@
-
-
 import mongoose from "mongoose";
 
 const donorSchema = new mongoose.Schema({
@@ -12,6 +10,27 @@ const donorSchema = new mongoose.Schema({
   address: { type: String, required: true },
   lastDonation: { type: String, default: null },
   donationCount: { type: Number, default: 0 },
+  
+  // Approval fields
+  status: {
+    type: String,
+    enum: ['pending', 'approved', 'rejected'],
+    default: 'pending'
+  },
+  approvedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    default: null
+  },
+  approvedAt: {
+    type: Date,
+    default: null
+  },
+  rejectionReason: {
+    type: String,
+    default: null
+  },
+  
   location: {
     type: {
       type: String,
@@ -19,7 +38,7 @@ const donorSchema = new mongoose.Schema({
       default: 'Point',
     },
     coordinates: {
-      type: [Number], // [longitude, latitude]
+      type: [Number],
       required: true,
     },
   },
@@ -28,11 +47,13 @@ const donorSchema = new mongoose.Schema({
     ref: 'User',
     required: true,
   }
+}, {
+  timestamps: true
 });
 
-
+// Virtual field for verified status (only for approved donors)
 donorSchema.virtual('isVerified').get(function() {
-  return this.donationCount >= 2;
+  return this.status === 'approved' && this.donationCount >= 2;
 });
 
 // ✅ Include virtuals in JSON output
@@ -40,6 +61,7 @@ donorSchema.set('toJSON', { virtuals: true });
 
 // Create geospatial index for location
 donorSchema.index({ location: "2dsphere" });
+donorSchema.index({ status: 1 });
 
 const Donor = mongoose.model("Donor", donorSchema);
 export default Donor;

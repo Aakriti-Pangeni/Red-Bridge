@@ -1,5 +1,3 @@
-
-
 import Donor from "../models/donor.model.js";
 import User from "../models/user.model.js";
 import getCoordinates from "../utils/geocode.js";
@@ -61,6 +59,7 @@ export const createDonor = async (req, res) => {
 
     const savedUser = await newUser.save();
 
+    // Create new donor with pending status
     const newDonor = new Donor({
       name,
       email,
@@ -75,6 +74,8 @@ export const createDonor = async (req, res) => {
         coordinates,
       },
         lastDonation: req.body.lastDonation || null,
+      status: 'pending', // This ensures donors start as pending
+      donationCount: 0
     });
 
     const createdDonor = await newDonor.save();
@@ -85,10 +86,10 @@ export const createDonor = async (req, res) => {
   }
 };
 
-// GET ALL DONORS
+// GET ALL DONORS (only approved)
 export const getAllDonors = async (req, res) => {
   try {
-    const donors = await Donor.find().populate("user");
+    const donors = await Donor.find({ status: 'approved' }).populate("user");
     res.json(donors);
   } catch (err) {
     console.error(err);
@@ -130,10 +131,12 @@ export const getDonorById = async (req, res) => {
   const { id } = req.params;
   try {
     const donor = await Donor.findById(id).populate("user");
-    if (!donor) return res.status(404).json({ error: "Donor not found" });
+    if (!donor) {
+      return res.status(404).json({ error: "Donor not found" });
+    }
     res.json(donor);
   } catch (err) {
-    console.error(err);
+    console.error("Get donor by ID error:", err);
     res.status(500).json({ error: "Error fetching donor" });
   }
 };
@@ -287,5 +290,76 @@ export const getDonorByUserId = async (req, res) => {
   } catch (error) {
     console.error("Get donor by user ID error:", error);
     res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+// Admin functions for donor approval
+export const getPendingDonors = async (req, res) => {
+  try {
+    const pendingDonors = await Donor.find({ status: 'pending' })
+      .populate('user', 'userName email')
+      .sort({ createdAt: -1 });
+    
+    res.json(pendingDonors);
+  } catch (error) {
+    console.error("Get pending donors error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+export const approveDonor = async (req, res) => {
+  try {
+    const { donorId } = req.params;
+    const adminId = req.user._id;
+    
+    const donor = await Donor.findById(donorId);
+    if (!donor) {
+      return res.status(404).json({ message: "Donor not found" });
+    }
+    
+    if (donor.status !== 'pending') {
+      return res.status(400).json({ message: "Donor is already processed" });
+    }
+    
+    donor.status = 'approved';
+    donor.approvedBy = adminId;
+    donor.approvedAt = new Date();
+    donor.rejectionReason = null;
+    
+    await donor.save();
+    
+    res.json({ message: "Donor approved successfully", donor });
+  } catch (error) {
+    console.error("Approve donor error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+export const rejectDonor = async (req, res) => {
+  try {
+    const { donorId } = req.params;
+    const { reason } = req.body;
+    const adminId = req.user._id;
+    
+    const donor = await Donor.findById(donorId);
+    if (!donor) {
+      return res.status(404).json({ message: "Donor not found" });
+    }
+    
+    if (donor.status !== 'pending') {
+      return res.status(400).json({ message: "Donor is already processed" });
+    }
+    
+    donor.status = 'rejected';
+    donor.approvedBy = adminId;
+    donor.approvedAt = new Date();
+    donor.rejectionReason = reason || 'No reason provided';
+    
+    await donor.save();
+    
+    res.json({ message: "Donor rejected successfully", donor });
+  } catch (error) {
+    console.error("Reject donor error:", error);
+    res.status(500).json({ message: "Server error" });
   }
 };

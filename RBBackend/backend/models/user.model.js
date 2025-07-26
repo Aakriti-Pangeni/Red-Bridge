@@ -6,35 +6,24 @@ import mongoose from "mongoose";
 const userSchema = new mongoose.Schema({
   userName: { type: String, required: true },
   email: { type: String, required: true, unique: true },
-    phonenumber: {
+  phonenumber: {
     type: String,
     required: true
   },
-   password: { type: String, required: true },
+  password: { type: String, required: true },
   otp: { type: String },
   otpExpiry: { type: Date },
   isVerified: { type: Boolean, default: false },
+  dateOfBirth: { type: Date },
   
- 
   role: {
     type: String,
-    enum: ['user', 'donor', 'admin'],
+    enum: ['user', 'admin'],
     default: 'user'
-  },
-  // location: {
-  //   type: {
-  //     type: String,
-  //     enum: ['Point'],
-  //     default: 'Point'
-  //   },
-  //   coordinates: {
-  //     type: [Number], // [lng, lat]
-  //     required: true
-  //   }
-  // }
+  }
+}, {
+  timestamps: true
 });
-
-// userSchema.index({ location: "2dsphere" });
 
 const User = mongoose.model('User', userSchema);
 export default User;

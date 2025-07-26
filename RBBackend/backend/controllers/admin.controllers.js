@@ -28,18 +28,64 @@ adminController.register = async (req, res) => {
 };
 
 // Login Admin
+// adminController.login = async (req, res) => {
+//   try {
+//     const { email, password } = req.body;
+
+//     const admin = await Admin.findOne({ email });
+//     if (!admin) return res.status(404).json({ message: "Admin not found" });
+
+//     const isMatch = await bcrypt.compare(password, admin.password);
+//     if (!isMatch) return res.status(401).json({ message: "Invalid credentials" });
+
+//     const token = jwt.sign({ adminId: admin._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+//     res.json({ message: "Login successful", token });
+//   } catch (error) {
+//     console.error("Login Error:", error);
+//     res.status(500).json({ message: "Something went wrong" });
+//   }
+// };
+
+
+
+// UPDATE the login function (line 20-32):
+
 adminController.login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
+    console.log('Admin login attempt:', email);
+
     const admin = await Admin.findOne({ email });
-    if (!admin) return res.status(404).json({ message: "Admin not found" });
+    if (!admin) {
+      console.log('❌ Admin not found');
+      return res.status(404).json({ message: "Admin not found" });
+    }
 
     const isMatch = await bcrypt.compare(password, admin.password);
-    if (!isMatch) return res.status(401).json({ message: "Invalid credentials" });
+    if (!isMatch) {
+      console.log('❌ Invalid password');
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
 
-    const token = jwt.sign({ adminId: admin._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
-    res.json({ message: "Login successful", token });
+    // ✅ FIX: Use 'userId' instead of 'adminId' to match middleware
+    const token = jwt.sign(
+      { userId: admin._id, isAdmin: true }, 
+      process.env.JWT_SECRET, 
+      { expiresIn: "24h" }
+    );
+
+    console.log('✅ Admin login successful:', admin.email);
+
+    res.json({ 
+      message: "Login successful", 
+      token,
+      admin: {
+        id: admin._id,
+        name: admin.name,
+        email: admin.email
+      }
+    });
   } catch (error) {
     console.error("Login Error:", error);
     res.status(500).json({ message: "Something went wrong" });
