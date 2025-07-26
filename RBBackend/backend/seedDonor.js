@@ -394,7 +394,7 @@ async function seedDonors() {
 
     const fakeUserId = new mongoose.Types.ObjectId();
     const donorArray = [];
-    const totalDonors = 50; // Reduced for faster processing
+    const totalDonors = 80; // Reduced for faster processing
 
     console.log('🌍 Starting geocoding process...');
 

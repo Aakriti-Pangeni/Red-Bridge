@@ -4,6 +4,7 @@
 import React, { useEffect, useState } from 'react';
 import StatsCard from './statscard';
 import { Users, Clock, CheckCircle, XCircle } from 'lucide-react';
+import {toast, ToastContainer} from 'react-toastify';
 
 const DashboardPage = () => {
   const [stats, setStats] = useState({ totalDonors: 0, totalUsers: 0 });
@@ -34,62 +35,9 @@ const DashboardPage = () => {
       }
     };
 
-    // const fetchPendingDonors = async () => {
-    //   try {
-    //     // Get token from localStorage or cookies
-    //     let token = localStorage.getItem('authToken');
-    //     if (!token) {
-    //       // Try to get from cookies
-    //       const getCookie = (name) => {
-    //         const value = `; ${document.cookie}`;
-    //         const parts = value.split(`; ${name}=`);
-    //         if (parts.length === 2) return parts.pop().split(";").shift();
-    //         return null;
-    //       };
-    //       token = getCookie('authToken');
-    //     }
-
-    //     console.log('=== PENDING DONORS DEBUG ===');
-    //     console.log('Token found:', token ? 'YES' : 'NO');
-    //     console.log('Token value:', token?.substring(0, 20) + '...');
-
-    //     if (!token) {
-    //       console.log('No token found, skipping pending donors fetch');
-    //       return;
-    //     }
-
-    //     const response = await fetch('http://localhost:4000/donor/pending', {
-    //       headers: {
-    //         'Authorization': `Bearer ${token}`,
-    //         'Content-Type': 'application/json'
-    //       }
-    //     });
-
-    //     console.log('Pending donors response status:', response.status);
-
-    //     if (response.status === 401) {
-    //       console.log('Authentication failed - invalid token');
-    //     } else if (response.status === 403) {
-    //       console.log('Access denied - not admin');
-    //     } else if (response.ok) {
-    //       const data = await response.json();
-    //       console.log('Pending donors data:', data);
-    //       console.log('Number of pending donors:', data.length);
-    //       setPendingDonors(data);
-    //     } else {
-    //       console.error('Failed to fetch pending donors:', response.status);
-    //     }
-    //   } catch (error) {
-    //     console.error('Failed to fetch pending donors:', error);
-    //   }
-    // };
-
-
-// UPDATE your token retrieval in fetchPendingDonors:
-
-const fetchPendingDonors = async () => {
+   const fetchPendingDonors = async () => {
   try {
-    // ✅ Get token from multiple sources
+  
     let token = localStorage.getItem('authToken');
     
     if (!token) {
@@ -109,7 +57,7 @@ const fetchPendingDonors = async () => {
     console.log('LocalStorage authToken:', localStorage.getItem('authToken'));
 
     if (!token) {
-      console.log('❌ No token found, skipping pending donors fetch');
+      console.log(' No token found, skipping pending donors fetch');
       return;
     }
 
@@ -125,25 +73,25 @@ const fetchPendingDonors = async () => {
     console.log('Response status:', response.status);
 
     if (response.status === 401) {
-      console.log('❌ Authentication failed - invalid token');
+      console.log('Authentication failed - invalid token');
       const errorText = await response.text();
       console.log('Error response:', errorText);
     } else if (response.status === 403) {
-      console.log('❌ Access denied - not admin');
+      console.log(' Access denied - not admin');
       const errorText = await response.text();
       console.log('Error response:', errorText);
     } else if (response.ok) {
       const data = await response.json();
-      console.log('✅ Pending donors data:', data);
+      console.log(' Pending donors data:', data);
       console.log('Number of pending donors:', data.length);
       setPendingDonors(data);
     } else {
-      console.error('❌ Failed to fetch pending donors:', response.status);
+      console.error(' Failed to fetch pending donors:', response.status);
       const errorText = await response.text();
       console.log('Error response:', errorText);
     }
   } catch (error) {
-    console.error('❌ Network error:', error);
+    console.error(' Network error:', error);
   }
 };
 
@@ -172,10 +120,11 @@ const fetchPendingDonors = async () => {
       color: 'bg-yellow-600'
     }
   ];
+  <ToastContainer />
 
   const handleApprove = async (donorId) => {
     try {
-      // Get token from localStorage or cookies
+    
       let token = localStorage.getItem('authToken');
       if (!token) {
         const getCookie = (name) => {
@@ -197,19 +146,19 @@ const fetchPendingDonors = async () => {
 
       if (response.ok) {
         setPendingDonors(pendingDonors.filter(donor => donor._id !== donorId));
-        alert('Donor approved successfully');
+        toast.success('Donor approved successfully');
       } else {
-        alert('Failed to approve donor');
+        toast.error('Failed to approve donor');
       }
     } catch (error) {
       console.error('Error approving donor:', error);
-      alert('Error approving donor');
+      toast.error('Error approving donor');
     }
   };
 
   const handleReject = async () => {
     try {
-      // Get token from localStorage or cookies
+     
       let token = localStorage.getItem('authToken');
       if (!token) {
         const getCookie = (name) => {
@@ -235,13 +184,13 @@ const fetchPendingDonors = async () => {
         setShowRejectModal(false);
         setRejectionReason('');
         setSelectedDonor(null);
-        alert('Donor rejected successfully');
+        toast.success('Donor rejected successfully');
       } else {
-        alert('Failed to reject donor');
+        toast.error('Failed to reject donor');
       }
     } catch (error) {
       console.error('Error rejecting donor:', error);
-      alert('Error rejecting donor');
+      toast.error('Error rejecting donor');
     }
   };
 
@@ -278,7 +227,7 @@ const fetchPendingDonors = async () => {
         </div>
       </div>
 
-      {/* Pending Donors Section */}
+
       <div className="bg-slate-800 rounded-lg shadow-sm p-6 border border-slate-700">
         <h3 className="text-lg font-semibold text-white mb-4">Pending Donor Approvals ({pendingDonors.length})</h3>
         {pendingDonors.length === 0 ? (
@@ -321,7 +270,7 @@ const fetchPendingDonors = async () => {
         )}
       </div>
 
-      {/* Reject Modal */}
+      
       {showRejectModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg w-full max-w-md">

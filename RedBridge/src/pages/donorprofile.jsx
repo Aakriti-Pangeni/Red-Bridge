@@ -141,7 +141,7 @@ const response = await fetch(`http://localhost:4000/donor/user/${userId}`);
               Registration Pending
             </h2>
             <p className="text-gray-600 mb-6">
-              Your donor registration is currently under review by our admin team. You'll receive an email once it's processed.
+              Your donor registration is currently under review by our admin team. 
             </p>
             <button
               onClick={() => navigate("/home")}

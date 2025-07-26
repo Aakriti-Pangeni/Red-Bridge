@@ -2,15 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { Trash2 } from 'lucide-react';
 import axios from 'axios';
 
+
 const DonorsPage = () => {
   const [donors, setDonors] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Fetch donors from backend
+
   useEffect(() => {
     const fetchDonors = async () => {
       try {
-        const response = await axios.get('http://localhost:4000/donor'); // Update this URL if needed
+        const response = await axios.get('http://localhost:4000/donor'); 
         setDonors(response.data);
         setLoading(false);
       } catch (error) {

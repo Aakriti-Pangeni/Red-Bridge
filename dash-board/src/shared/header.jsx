@@ -6,15 +6,15 @@ const Header = ({ sidebarOpen, setSidebarOpen, activeTab }) => {
   const [adminInfo, setAdminInfo] = useState(null);
   const dropdownRef = useRef(null);
 
-  // Get admin info from localStorage/cookies
+ 
   useEffect(() => {
     const getAdminInfo = () => {
       try {
-        // Try localStorage first
+      
         let userInfo = localStorage.getItem('userInfo');
         
         if (!userInfo) {
-          // Try cookies as fallback
+          
           const cookie = document.cookie
             .split('; ')
             .find(row => row.startsWith('userInfo='));
@@ -37,7 +37,7 @@ const Header = ({ sidebarOpen, setSidebarOpen, activeTab }) => {
     getAdminInfo();
   }, []);
 
-  // Close dropdown when clicking outside
+ 
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -49,36 +49,35 @@ const Header = ({ sidebarOpen, setSidebarOpen, activeTab }) => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Get admin display name
+
   const getAdminName = () => {
     if (!adminInfo) return 'Admin';
     return adminInfo.name || adminInfo.userName || 'Admin User';
   };
 
-  // Get admin first letter for avatar
+ 
   const getAdminInitial = () => {
     const name = getAdminName();
     return name.charAt(0).toUpperCase();
   };
 
-  // Handle logout
+ 
   const handleLogout = () => {
     try {
-      // Clear localStorage
+     
       localStorage.removeItem('authToken');
       localStorage.removeItem('userInfo');
       
-      // Clear cookies
       document.cookie = 'authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
       document.cookie = 'userInfo=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
       
       console.log('✅ Admin logged out successfully');
       
-      // Redirect to login page
+     
       window.location.href = 'http://localhost:5173/login';
     } catch (error) {
       console.error('Error during logout:', error);
-      // Force redirect even if there's an error
+     
       window.location.href = 'http://localhost:5173/login';
     }
   };
@@ -97,7 +96,7 @@ const Header = ({ sidebarOpen, setSidebarOpen, activeTab }) => {
           <h2 className="text-xl font-semibold text-white capitalize">{activeTab}</h2>
         </div>
 
-        {/* ✅ Updated Admin Dropdown */}
+      
         <div className="relative" ref={dropdownRef}>
           <button
             onClick={() => setDropdownOpen(!dropdownOpen)}
@@ -117,10 +116,10 @@ const Header = ({ sidebarOpen, setSidebarOpen, activeTab }) => {
             </svg>
           </button>
 
-          {/* ✅ Dropdown Menu */}
+       
           {dropdownOpen && (
             <div className="absolute right-0 top-12 bg-white text-gray-800 w-72 py-3 px-4 rounded-lg shadow-lg z-50 border">
-              {/* Admin Info Section */}
+             
               <div className="border-b border-gray-200 pb-3 mb-3">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center">
@@ -137,11 +136,10 @@ const Header = ({ sidebarOpen, setSidebarOpen, activeTab }) => {
                 </div>
               </div>
 
-              {/* Menu Items */}
+            
               <div className="space-y-1">
                 <div className="flex items-center gap-3 px-3 py-2 text-gray-700">
-                  {/* <User className="w-4 h-4 text-blue-600" /> */}
-                  {/* <span className="text-sm">Admin Profile</span> */}
+                 
                 </div>
                 
                 <button
