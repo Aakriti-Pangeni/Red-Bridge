@@ -5,7 +5,7 @@
 import React, { useEffect, useState } from "react";
 import MainLayout from "../shared/sidebar/mainlayout";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify"; 
+import { ToastContainer, toast } from "react-toastify";
 
 const getCookie = (name) => {
   const value = `; ${document.cookie}`;  // ✅ Add "; " prefix
@@ -35,9 +35,9 @@ const getDistanceFromLatLonInKm = (lat1, lon1, lat2, lon2) => {
   const a =
     Math.sin(dLat / 2) * Math.sin(dLat / 2) +
     Math.cos(deg2rad(lat1)) *
-      Math.cos(deg2rad(lat2)) *
-      Math.sin(dLon / 2) *
-      Math.sin(dLon / 2);
+    Math.cos(deg2rad(lat2)) *
+    Math.sin(dLon / 2) *
+    Math.sin(dLon / 2);
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   return R * c;
 };
@@ -119,7 +119,7 @@ const FindDonor = () => {
   }, [searchLocation]);
 
 
-   useEffect(() => {
+  useEffect(() => {
     const fetchDonors = async () => {
       try {
         const res = await axios.get("http://localhost:4000/donor");
@@ -167,130 +167,130 @@ const FindDonor = () => {
   };
 
   const filteredDonors = knnDonors();
-<ToastContainer/>
-//  const handleRequest = async (donor) => {
-//   try {
-//     const token = getCookie("token"); // or whatever your cookie name is for JWT
-//     const response = await fetch("http://localhost:4000/donor/request", {
-//       method: "POST",
-//       headers: {
-//         "Content-Type": "application/json",
-//         ...(token && { Authorization: `Bearer ${token}` }),
-//       },
-//       body: JSON.stringify({ donorId: donor._id }),
-//     });
+  <ToastContainer />
+  //  const handleRequest = async (donor) => {
+  //   try {
+  //     const token = getCookie("token"); // or whatever your cookie name is for JWT
+  //     const response = await fetch("http://localhost:4000/donor/request", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         ...(token && { Authorization: `Bearer ${token}` }),
+  //       },
+  //       body: JSON.stringify({ donorId: donor._id }),
+  //     });
 
-//     // const result = await response.json();
+  //     // const result = await response.json();
 
-//     let result;
-// try {
-//   result = await response.json();
-// } catch (err) {
-//   result = { error: "Invalid response from server." };
-// }
-
-
-//     if (response.ok) {
-//       toast.success("Request sent successfully!");
-//     } else {
-//       toast.error(result.error || "Failed to send request.");
-//     }
-//   } catch (err) {
-//     console.error("Request Error:", err);
-//     toast.error("Something went wrong while sending request.");
-//   }
-// };
+  //     let result;
+  // try {
+  //   result = await response.json();
+  // } catch (err) {
+  //   result = { error: "Invalid response from server." };
+  // }
 
 
-
-// const handleRequest = async (donor) => {
-//   try {
-//     // const cookie = getCookie("userInfo");
-//     // const token = cookie ? JSON.parse(decodeURIComponent(cookie)).token : null;
-
-
-//     const token = getCookie("authToken");
-
-//     // const token = localStorage.getItem("token");
-
-//     const response = await fetch("http://localhost:4000/donor/request", {
-//       method: "POST",
-//       headers: {
-//         "Content-Type": "application/json",
-//         ...(token && { Authorization: `Bearer ${token}` }),
-//       },
-//       body: JSON.stringify({ donorId: donor._id }),
-//     });
-
-//     let result;
-//     try {
-//       result = await response.json();
-//     } catch (err) {
-//       result = { error: "Invalid response from server." };
-//     }
-
-//     if (response.ok) {
-//       toast.success("Request sent successfully!");
-//     } else {
-//       toast.error(result.error || "Failed to send request.");
-//     }
-//   } catch (err) {
-//     console.error("Request Error:", err);
-//     toast.error("Something went wrong while sending request.");
-//   }
-// };
+  //     if (response.ok) {
+  //       toast.success("Request sent successfully!");
+  //     } else {
+  //       toast.error(result.error || "Failed to send request.");
+  //     }
+  //   } catch (err) {
+  //     console.error("Request Error:", err);
+  //     toast.error("Something went wrong while sending request.");
+  //   }
+  // };
 
 
-const handleRequest = async (donor) => {
-  try {
-    // Get the userInfo cookie and extract the token from it
-    const cookie = getCookie("userInfo");
-    let token = null;
-    
-    if (cookie) {
-      try {
-        const parsed = JSON.parse(cookie);
-        console.log("Parsed user info:", parsed); // Debug log
-        
-        // ✅ Get token from authToken cookie instead
-        token = getCookie("authToken");
-        console.log("Token from authToken cookie:", token); // Debug log
-      } catch (err) {
-        console.error("Error parsing userInfo cookie:", err);
-      }
-    }
 
-    if (!token) {
-      toast.error("Please log in to send a request.");
-      return;
-    }
+  // const handleRequest = async (donor) => {
+  //   try {
+  //     // const cookie = getCookie("userInfo");
+  //     // const token = cookie ? JSON.parse(decodeURIComponent(cookie)).token : null;
 
-    const response = await fetch("http://localhost:4000/donor/request", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`, // Use the extracted token
-      },
-      body: JSON.stringify({ donorId: donor._id }),
-    });
 
-    let result;
+  //     const token = getCookie("authToken");
+
+  //     // const token = localStorage.getItem("token");
+
+  //     const response = await fetch("http://localhost:4000/donor/request", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         ...(token && { Authorization: `Bearer ${token}` }),
+  //       },
+  //       body: JSON.stringify({ donorId: donor._id }),
+  //     });
+
+  //     let result;
+  //     try {
+  //       result = await response.json();
+  //     } catch (err) {
+  //       result = { error: "Invalid response from server." };
+  //     }
+
+  //     if (response.ok) {
+  //       toast.success("Request sent successfully!");
+  //     } else {
+  //       toast.error(result.error || "Failed to send request.");
+  //     }
+  //   } catch (err) {
+  //     console.error("Request Error:", err);
+  //     toast.error("Something went wrong while sending request.");
+  //   }
+  // };
+
+
+  const handleRequest = async (donor) => {
     try {
-      result = await response.json();
-    } catch (err) {
-      result = { error: "Invalid response from server." };
-    }
+      // Get the userInfo cookie and extract the token from it
+      const cookie = getCookie("userInfo");
+      let token = null;
 
-    if (response.ok) {
-      toast.success("Request sent successfully!");
-    } else {
-      toast.error(result.error || "Failed to send request.");
+      if (cookie) {
+        try {
+          const parsed = JSON.parse(cookie);
+          console.log("Parsed user info:", parsed); // Debug log
+
+          // ✅ Get token from authToken cookie instead
+          token = getCookie("authToken");
+          console.log("Token from authToken cookie:", token); // Debug log
+        } catch (err) {
+          console.error("Error parsing userInfo cookie:", err);
+        }
+      }
+
+      if (!token) {
+        toast.error("Please log in to send a request.");
+        return;
+      }
+
+      const response = await fetch("http://localhost:4000/donor/request", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // Use the extracted token
+        },
+        body: JSON.stringify({ donorId: donor._id }),
+      });
+
+      let result;
+      try {
+        result = await response.json();
+      } catch (err) {
+        result = { error: "Invalid response from server." };
+      }
+
+      if (response.ok) {
+        toast.success("Request sent successfully!");
+      } else {
+        toast.error(result.error || "Failed to send request.");
+      }
+    } catch (err) {
+      console.error("Request Error:", err);
+      toast.error("Something went wrong while sending request.");
     }
-  } catch (err) {
-    console.error("Request Error:", err);
-    toast.error("Something went wrong while sending request.");
-  }
-};
+  };
 
   return (
     <MainLayout>
@@ -358,30 +358,38 @@ const handleRequest = async (donor) => {
                     className={`${index % 2 === 0 ? "bg-gray-100" : "bg-white"}`}
                   >
                     <td className="p-2 text-center border">{index + 1}.</td>
-                    <td className="p-2 border">{donor.name}</td>
+                    <td className="p-2 border">
+                      <div className="flex items-center">
+                        {/* ✅ Add verified badge */}
+                        {donor.donationCount >= 2 && (
+                          <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 mr-2">
+                            ✓ Verified
+                          </span>
+                        )}
+                        {donor.name}
+                      </div>
+                    </td>
                     <td className="p-2 border">{donor.address}</td>
                     {user && <td className="p-2 border font-medium">{donor.phone}</td>}
                     <td className="p-2 border font-semibold">
                       {donor.bloodGroup}
-                    <span
-                className={`ml-2 text-sm font-normal ${
-                  donor.available ? "text-green-600" : "text-red-600"
-                }`}
-              >
-                ({donor.available ? "Available" : "Unavailable"})
-              </span>
-            </td>
-            {user && (
-              <td className="p-2 border text-center">
-                <button
-                  onClick={() => handleRequest(donor)}
-                  disabled={!donor.available}
-                  className={`px-4 py-1 rounded-lg text-sm shadow ${
-                    donor.available
-                      ? "bg-blue-950 text-white hover:bg-blue-900"
-                      : "bg-gray-400 text-gray-200 cursor-not-allowed"
-                  }`}
-                >
+                      <span
+                        className={`ml-2 text-sm font-normal ${donor.available ? "text-green-600" : "text-red-600"
+                          }`}
+                      >
+                        ({donor.available ? "Available" : "Unavailable"})
+                      </span>
+                    </td>
+                    {user && (
+                      <td className="p-2 border text-center">
+                        <button
+                          onClick={() => handleRequest(donor)}
+                          disabled={!donor.available}
+                          className={`px-4 py-1 rounded-lg text-sm shadow ${donor.available
+                              ? "bg-blue-950 text-white hover:bg-blue-900"
+                              : "bg-gray-400 text-gray-200 cursor-not-allowed"
+                            }`}
+                        >
                           Request
                         </button>
                       </td>

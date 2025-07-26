@@ -142,7 +142,7 @@ export const getDonorById = async (req, res) => {
 
 export const updateDonor = async (req, res) => {
   const { id } = req.params;
-  const { phone, address, lastDonation } = req.body; 
+  const { phone, address, lastDonation, donationCount } = req.body; 
 
   try {
     const donor = await Donor.findById(id);
@@ -152,6 +152,7 @@ export const updateDonor = async (req, res) => {
     if (phone) donor.phone = phone;
     if (address) donor.address = address;
     if (lastDonation !== undefined) donor.lastDonation = lastDonation;
+    if (donationCount !== undefined) donor.donationCount = donationCount;
 
     await donor.save();
     res.json(donor);
@@ -240,5 +241,51 @@ export const getDonorProfile = async (req, res) => {
   } catch (err) {
     console.error("Error in getDonorProfile:", err.message);
     res.status(500).json({ message: "Error fetching donor" });
+  }
+};
+
+
+// Add this new controller function
+// export const getDonorByUserId = async (req, res) => {
+//   try {
+//     const { userId } = req.params;
+    
+//     // Find donor by user reference
+//     const donor = await Donor.findOne({ user: userId });
+    
+//     if (!donor) {
+//       return res.status(404).json({ message: "Donor profile not found" });
+//     }
+    
+//     res.json(donor);
+//   } catch (error) {
+//     console.error("Get donor by user ID error:", error);
+//     res.status(500).json({ message: "Server error" });
+//   }
+// };
+
+export const getDonorByUserId = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    
+    console.log("Looking for donor with userId:", userId); // Debug log
+    
+    if (!userId || userId === 'undefined') {
+      return res.status(400).json({ message: "Invalid user ID provided" });
+    }
+    
+    // Find donor by user reference
+    const donor = await Donor.findOne({ user: userId });
+    
+    console.log("Found donor:", donor); // Debug log
+    
+    if (!donor) {
+      return res.status(404).json({ message: "Donor profile not found for this user" });
+    }
+    
+    res.json(donor);
+  } catch (error) {
+    console.error("Get donor by user ID error:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
   }
 };

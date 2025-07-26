@@ -100,7 +100,7 @@ user.login = async (req, res) => {
       message: "Login successful",
       token,
       user: {
-        id: userData._id,
+        _id: userData._id,
         userName: userData.userName || userData.name,
         email: userData.email,
         phonenumber: userData.phonenumber || null,

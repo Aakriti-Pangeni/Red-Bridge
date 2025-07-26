@@ -25,8 +25,8 @@ const Welcome = () => {
     } catch (e) {
       parsed = null;
     }
-    if (parsed && parsed.id) {
-      setUserId(parsed.id);
+    if (parsed && parsed._id) {
+      setUserId(parsed._id);
     }
   }, []);
 
@@ -35,7 +35,7 @@ const Welcome = () => {
     const checkDonorStatus = async () => {
       try {
         if (userId) {
-          const res = await axios.get(`http://localhost:4000/donor/profile/${userId}`);
+          const res = await axios.get(`http://localhost:4000/donor/user/${userId}`);
           if (res.data && res.data._id) {
             setIsDonor(true); // User is a donor
           }

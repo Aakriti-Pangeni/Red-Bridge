@@ -13,6 +13,7 @@ const EditProfile = () => {
     phone: "",
     address: "",
     lastDonation: "",
+      donationCount: 0, 
   });
 
   const [loading, setLoading] = useState(false);
@@ -28,6 +29,7 @@ const EditProfile = () => {
           phone: data.phone || "",
           address: data.address || "",
           lastDonation: data.lastDonation || "",
+          donationCount: data.donationCount || 0,
         });
       } catch (err) {
         setError("Failed to load profile");
@@ -40,6 +42,13 @@ const EditProfile = () => {
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+
+    //
+     const { name, value } = e.target;
+    // ✅ Handle number input for donationCount
+    const processedValue = name === 'donationCount' ? parseInt(value) || 0 : value;
+    setForm({ ...form, [name]: processedValue });
+  
   };
 
   const handleSubmit = async (e) => {
@@ -100,6 +109,26 @@ const EditProfile = () => {
                 className="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-900"
               />
             </div>
+
+
+             <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Number of Donations Made
+              </label>
+              <input
+                type="number"
+                name="donationCount"
+                value={form.donationCount}
+                onChange={handleChange}
+                min="0"
+                placeholder="Enter number of donations"
+                className="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-900"
+              />
+              <p className="text-sm text-gray-500 mt-1">
+                {form.donationCount >= 2 ? "✅ Verified Donor (2+ donations)" : "Need 2+ donations for verified status"}
+              </p>
+            </div>
+
 
             <button
               type="submit"

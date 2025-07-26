@@ -11,7 +11,7 @@ import {
   updateDonor,
   deleteDonor,
   getDonorProfile,
-  requestDonor
+  requestDonor, getDonorByUserId
 } from '../controllers/donor.controller.js';
 
 const router = express.Router();
@@ -19,11 +19,14 @@ const router = express.Router();
 router.post('/register', createDonor);
 router.get('/', getAllDonors);
 router.get('/search', searchDonors);
+
+
+router.get("/profile/:id", getDonorProfile);
+router.get('/user/:userId', getDonorByUserId);
+router.post('/request', authMiddleware,  requestDonor);
+
+// router.get("/:id", getDonorProfile);
 router.get('/:id', getDonorById);
 router.put('/:id', updateDonor);
 router.delete('/:id', deleteDonor);
-router.get("/profile/:id", getDonorProfile);
-
-// router.get("/:id", getDonorProfile);
-router.post('/request', authMiddleware,  requestDonor);
 export default router;
