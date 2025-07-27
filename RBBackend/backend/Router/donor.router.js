@@ -1,68 +1,5 @@
 
 
-
-// import express from 'express';
-// import authMiddleware from '../middleware/auth.middleware.js';
-// import adminMiddleware from '../middleware/admin.middleware.js';
-// import {
-//   createDonor,
-//   getAllDonors,
-//   searchDonors,
-//   getDonorById,
-//   updateDonor,
-//   deleteDonor,
-//   getDonorProfile,
-//   requestDonor, 
-//   getDonorByUserId,
-//   getPendingDonors,
-//   approveDonor,
-//   rejectDonor
-// } from '../controllers/donor.controller.js';
-// import Request from '../models/request.model.js';
-// import { verifyToken } from '../middleware/auth.middleware.js';
-
-
-// const router = express.Router();
-
-// router.post('/register', createDonor);
-// router.get('/', getAllDonors);
-// router.get('/search', searchDonors);
-
-// // Admin routes for donor approval
-// router.get('/pending', adminMiddleware, getPendingDonors);
-// router.put('/approve/:donorId',  adminMiddleware, approveDonor);
-// router.put('/reject/:donorId',adminMiddleware, rejectDonor);
-
-// router.get("/profile/:id", getDonorProfile);
-// router.get('/user/:userId', getDonorByUserId);
-// router.post('/request', authMiddleware,  requestDonor);
-
-// // router.get("/:id", getDonorProfile);
-// router.get('/:id', getDonorById);
-// router.put('/:id', updateDonor);
-// router.delete('/:id', deleteDonor);
-
-// router.post('/request', verifyToken, async (req, res) => {
-//   try {
-//     const { donorId } = req.body;
-    
-//     // ✅ Create request using the new model
-//     const newRequest = new Request({
-//       userId: req.user.id,
-//       donorId,
-//       message: 'Blood donation request'
-//     });
-    
-//     await newRequest.save();
-    
-//     res.json({ message: 'Request sent successfully!' });
-//   } catch (error) {
-//     res.status(500).json({ error: 'Failed to send request' });
-//   }
-// });
-
-// export default router;
-
 import express from 'express';
 import authMiddleware from '../middleware/auth.middleware.js';
 import adminMiddleware from '../middleware/admin.middleware.js';
@@ -84,7 +21,7 @@ import Request from '../models/request.model.js';
 import Donor from '../models/donor.model.js';
 import User from '../models/user.model.js';
 import { sendDonorRequestEmail } from '../utils/email.utils.js';
-import sendSMS from '../utils/sendSms.js'; // ✅ Add SMS import
+import sendSMS from '../utils/sendSms.js'; 
 
 const router = express.Router();
 
@@ -100,7 +37,7 @@ router.put('/reject/:donorId', adminMiddleware, rejectDonor);
 router.get("/profile/:id", getDonorProfile);
 router.get('/user/:userId', getDonorByUserId);
 
-// ✅ UPDATED REQUEST ROUTE WITH EMAIL + SMS + DATABASE
+
 router.post('/request', authMiddleware, async (req, res) => {
   try {
     const { donorId, message } = req.body;
@@ -136,7 +73,7 @@ router.post('/request', authMiddleware, async (req, res) => {
     console.log('Donor found:', donor.name, donor.email, donor.phone);
     console.log('User found:', user.userName, user.email, user.phonenumber);
     
-    // ✅ 1. CREATE REQUEST IN DATABASE FIRST
+    
     const newRequest = new Request({
       userId: req.user.id,
       donorId,
@@ -144,9 +81,9 @@ router.post('/request', authMiddleware, async (req, res) => {
     });
     
     await newRequest.save();
-    console.log('✅ Request saved to database');
+    console.log(' Request saved to database');
     
-    // ✅ 2. SEND EMAIL
+  
     try {
       console.log('📧 Attempting to send email...');
       await sendDonorRequestEmail({
@@ -159,10 +96,10 @@ router.post('/request', authMiddleware, async (req, res) => {
       });
       console.log('Email sent successfully');
     } catch (emailError) {
-      console.error('❌ Email sending failed:', emailError);
+      console.error(' Email sending failed:', emailError);
     }
     
-    // ✅ 3. SEND SMS
+    // SEND SMS
     try {
       console.log('📱 Attempting to send SMS...');
       const smsMessage = ` RedBridge Alert: ${user.userName} needs ${donor.bloodGroup} blood urgently! Contact: ${user.phonenumber}. Please help if available. Thank you!`;
@@ -178,17 +115,17 @@ router.post('/request', authMiddleware, async (req, res) => {
     });
     
   } catch (error) {
-    console.error('❌ Error creating request:', error);
+    console.error('Error creating request:', error);
     res.status(500).json({ error: 'Failed to send request' });
   }
 });
 
-// ✅ Add test routes for debugging
+// Add test routes for debugging
 router.post('/test-email', async (req, res) => {
   try {
-    console.log('🧪 Testing email...');
+    console.log('Testing email...');
     await sendDonorRequestEmail({
-      donorEmail: 'test@example.com', // Replace with your email
+      donorEmail: 'test@example.com',
       donorName: 'Test Donor',
       requesterName: 'Test User',
       requesterPhone: '9876543210',
@@ -204,7 +141,7 @@ router.post('/test-email', async (req, res) => {
 router.post('/test-sms', async (req, res) => {
   try {
     const { phone } = req.body;
-    console.log('🧪 Testing SMS to:', phone);
+    console.log(' Testing SMS to:', phone);
     await sendSMS(phone || '9876543210', 'Test SMS from RedBridge');
     res.json({ message: 'Test SMS sent!' });
   } catch (error) {

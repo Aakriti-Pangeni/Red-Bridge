@@ -22,7 +22,8 @@ const ContactUs = () => {
     }));
   };
 
-// Replace the handleSubmit function in your contactus.jsx
+
+
 const handleSubmit = async (e) => {
   e.preventDefault();
   
@@ -68,7 +69,7 @@ const handleSubmit = async (e) => {
 
   return (
     <MainLayout>
-      <section className="flex flex-col-reverse md:flex-row justify-center items-center gap-8 px-4 py-12 bg-gray-200 mt-15 ">
+      <section className="flex flex-col-reverse md:flex-row justify-center items-center min-h-screen gap-8 px-4 py-12 bg-gray-200 mt-15 ">
         
         
         <div className="bg-white shadow-md rounded-lg px-6 py-8 w-full max-w-md">

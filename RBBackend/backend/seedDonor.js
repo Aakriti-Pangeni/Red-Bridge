@@ -101,7 +101,7 @@ async function seedDonors() {
       const lastDonation = getRandomLastDonation();
       
       
-      console.log(`📍 Geocoding ${i + 1}/${totalDonors}: ${address}`);
+      console.log(` Geocoding ${i + 1}/${totalDonors}: ${address}`);
       const coords = await getCoordinates(address);
       
       

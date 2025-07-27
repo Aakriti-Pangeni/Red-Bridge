@@ -12,7 +12,7 @@ export const linearSearch = async (req, res) => {
   }
 };
 
-// KNN (Geo Near)
+// KNN 
 export const knnSearch = async (req, res) => {
   const { longitude, latitude, bloodGroup } = req.query;
   try {

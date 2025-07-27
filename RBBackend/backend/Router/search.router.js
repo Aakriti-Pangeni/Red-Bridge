@@ -1,11 +1,3 @@
-// import express from 'express';
-// import { linearSearch, knnSearch } from '../controllers/search.controller.js';
-
-// const router = express.Router();
-// router.get('/linear', linearSearch);
-// router.get('/knn', knnSearch);
-// export default router;
-
 
 import express from 'express';
 import { linearSearch } from '../controllers/search.controller.js';
@@ -16,7 +8,7 @@ const router = express.Router();
 // Existing route
 router.get('/linear', linearSearch);
 
-// ✅ NEW: Road distance route
+// Road distance route
 router.post('/road-distance', async (req, res) => {
   try {
     const { userLat, userLon, donorLat, donorLon } = req.body;

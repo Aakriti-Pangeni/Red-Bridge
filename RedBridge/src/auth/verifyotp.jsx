@@ -76,7 +76,7 @@ const VerifyOTP = () => {
       if (response.ok) {
         // Store reset token for password reset
         localStorage.setItem('resetToken', data.resetToken);
-        localStorage.removeItem('resetEmail'); // Clean up
+        localStorage.removeItem('resetEmail'); 
         navigate('/reset-password');
       } else {
         setError(data.message || 'Invalid OTP');

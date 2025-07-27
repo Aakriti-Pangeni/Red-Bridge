@@ -48,7 +48,6 @@ adminController.register = async (req, res) => {
 
 
 
-// UPDATE the login function (line 20-32):
 
 adminController.login = async (req, res) => {
   try {
@@ -58,24 +57,24 @@ adminController.login = async (req, res) => {
 
     const admin = await Admin.findOne({ email });
     if (!admin) {
-      console.log('❌ Admin not found');
+      console.log(' Admin not found');
       return res.status(404).json({ message: "Admin not found" });
     }
 
     const isMatch = await bcrypt.compare(password, admin.password);
     if (!isMatch) {
-      console.log('❌ Invalid password');
+      console.log(' Invalid password');
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    // ✅ FIX: Use 'userId' instead of 'adminId' to match middleware
+   
     const token = jwt.sign(
       { userId: admin._id, isAdmin: true }, 
       process.env.JWT_SECRET, 
       { expiresIn: "24h" }
     );
 
-    console.log('✅ Admin login successful:', admin.email);
+    console.log('Admin login successful:', admin.email);
 
     res.json({ 
       message: "Login successful", 
@@ -92,7 +91,7 @@ adminController.login = async (req, res) => {
   }
 };
 
-// Get All Users (except passwords)
+
 adminController.getAllUsers = async (req, res) => {
   try {
     const users = await User.find().select('-password');

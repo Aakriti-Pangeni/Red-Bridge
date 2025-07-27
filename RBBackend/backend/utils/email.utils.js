@@ -15,7 +15,7 @@ const transporter = nodemailer.createTransport({
 export const sendWelcomeEmail = async (options) => {
     try {
         const mailOptions = {
-            from: `"RedBridge Blood Bank" <${process.env.EMAIL_USER}>`,
+            from: `"RedBridge " <${process.env.EMAIL_USER}>`,
             to: options.email,
             subject: 'Welcome to RedBridge Blood Bank!',
             html: `
@@ -65,7 +65,7 @@ export const sendDonationConfirmationEmail = async (donationDetails) => {
         });
 
         const mailOptions = {
-            from: `"RedBridge Blood Bank" <${process.env.EMAIL_USER}>`,
+            from: `"RedBridge "<${process.env.EMAIL_USER}>`,
             to: user.email,
             subject: `Blood Donation Confirmation - Thank You!`,
             html: `
@@ -116,7 +116,7 @@ export const sendDonationConfirmationEmail = async (donationDetails) => {
 export const sendPasswordResetOTP = async (options) => {
     try {
         const mailOptions = {
-            from: `"RedBridge Blood Bank" <${process.env.EMAIL_USER}>`,
+            from: `"RedBridge " <${process.env.EMAIL_USER}>`,
             to: options.email,
             subject: 'RedBridge Password Reset OTP',
             html: `
@@ -169,7 +169,7 @@ export const sendPasswordResetOTP = async (options) => {
 export const sendBloodRequestNotification = async (options) => {
     try {
         const mailOptions = {
-            from: `"RedBridge Blood Bank" <${process.env.EMAIL_USER}>`,
+            from: `"RedBridge " <${process.env.EMAIL_USER}>`,
             to: options.email,
             subject: `Urgent: Blood Request Match Found - ${options.bloodType}`,
             html: `
@@ -242,7 +242,7 @@ export const sendDonorRequestEmail = async ({
     console.log('Blood Group:', bloodGroup);
     
     const mailOptions = {
-      from: `"RedBridge Blood Bank" <${process.env.EMAIL_USER}>`,
+      from: `"RedBridge " <${process.env.EMAIL_USER}>`,
       to: donorEmail,
       subject: `Urgent Blood Donation Request from ${requesterName}`,
       html: `
@@ -313,7 +313,7 @@ export const sendContactEmail = async ({ name, subject, message }) => {
     
     const mailOptions = {
       from: `"RedBridge Contact Form" <${process.env.EMAIL_USER}>`,
-      to: 'redbridge321@gmail.com', // ✅ Your target email
+      to: 'redbridge321@gmail.com', 
       subject: ` RedBridge Contact: ${subject}`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f9f9;">
@@ -353,7 +353,7 @@ export const sendContactEmail = async ({ name, subject, message }) => {
                   hour: '2-digit',
                   minute: '2-digit'
                 })}<br/>
-                <em>RedBridge Blood Bank Management System</em>
+                <em>RedBridge Blood Donor Finding System</em>
               </p>
             </div>
           </div>

@@ -1,6 +1,6 @@
 import express from 'express';
 import Request from '../models/request.model.js';
-import Donor from '../models/donor.model.js'; // Add this import
+import Donor from '../models/donor.model.js'; 
 import authMiddleware from '../middleware/auth.middleware.js';
 
 const router = express.Router();
@@ -21,14 +21,14 @@ router.get('/user/sent', authMiddleware, async (req, res) => {
 // Get donor's received requests - FIXED VERSION
 router.get('/donor/received', authMiddleware, async (req, res) => {
   try {
-    // First, find the donor record for this user
+    
     const donor = await Donor.findOne({ user: req.user.id });
     
     if (!donor) {
       return res.status(404).json({ error: 'Donor profile not found' });
     }
     
-    // Then find requests for this donor using the donor's _id
+    
     const requests = await Request.find({ donorId: donor._id })
       .populate('userId', 'userName email phonenumber')
       .sort({ createdAt: -1 });
@@ -40,7 +40,7 @@ router.get('/donor/received', authMiddleware, async (req, res) => {
   }
 });
 
-// Update request status (for donors) - ALSO NEEDS FIXING
+
 router.put('/:requestId/status', authMiddleware, async (req, res) => {
   try {
     const { status, response } = req.body;
@@ -49,7 +49,7 @@ router.put('/:requestId/status', authMiddleware, async (req, res) => {
       return res.status(400).json({ error: 'Invalid status' });
     }
     
-    // Find the donor record for this user
+    
     const donor = await Donor.findOne({ user: req.user.id });
     
     if (!donor) {
@@ -59,7 +59,7 @@ router.put('/:requestId/status', authMiddleware, async (req, res) => {
     const request = await Request.findOneAndUpdate(
       { 
         _id: req.params.requestId, 
-        donorId: donor._id  // Use donor._id instead of req.user.id
+        donorId: donor._id  
       },
       { 
         status, 

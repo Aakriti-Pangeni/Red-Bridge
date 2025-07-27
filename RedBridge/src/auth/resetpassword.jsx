@@ -13,7 +13,7 @@ const ResetPassword = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Check if reset token exists
+    
     const resetToken = localStorage.getItem('resetToken');
     if (!resetToken) {
       navigate('/forgotpassword');
@@ -88,7 +88,7 @@ const ResetPassword = () => {
       const data = await response.json();
 
       if (response.ok) {
-        // Clean up localStorage
+        
         localStorage.removeItem('resetToken');
         
         // Show success message and redirect

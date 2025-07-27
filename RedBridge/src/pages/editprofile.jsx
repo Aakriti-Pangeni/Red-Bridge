@@ -45,7 +45,7 @@ const EditProfile = () => {
 
     //
      const { name, value } = e.target;
-    // ✅ Handle number input for donationCount
+    
     const processedValue = name === 'donationCount' ? parseInt(value) || 0 : value;
     setForm({ ...form, [name]: processedValue });
   

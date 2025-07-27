@@ -31,6 +31,8 @@ const calculateAvailability = (lastDonation) => {
   return diffMonths >= 4;
 };
 
+
+//haversine formula calculation
 const getDistanceFromLatLonInKm = (lat1, lon1, lat2, lon2) => {
   const deg2rad = (deg) => deg * (Math.PI / 180);
   const R = 6371;
@@ -76,7 +78,7 @@ const FindDonor = () => {
   const [hasSearched, setHasSearched] = useState(false);
   const [useRoadDistance, setUseRoadDistance] = useState(false);
 
-  // Get user info from cookie
+ 
   useEffect(() => {
     const cookie = getCookie("userInfo");
     if (cookie) {
@@ -357,11 +359,11 @@ const handleRequest = async (donor) => {
                 onChange={(e) => setUseRoadDistance(e.target.checked)}
                 className="rounded text-red-600"
               />
-              <span className="text-gray-700">🛣️ Use road distance</span>
+              <span className="text-gray-700"> Use road distance</span>
             </label>
           )}
 
-          {/* Search Button */}
+         
           <button
             onClick={handleSearch}
             disabled={isSearching}
@@ -380,7 +382,7 @@ const handleRequest = async (donor) => {
             )}
           </button>
 
-          {/* Clear Button */}
+          
           {(hasSearched || searchLocation || selectedGroup) && (
             <button
               onClick={handleClearSearch}

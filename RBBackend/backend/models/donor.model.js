@@ -56,10 +56,10 @@ donorSchema.virtual('isVerified').get(function() {
   return this.status === 'approved' && this.donationCount >= 2;
 });
 
-// ✅ Include virtuals in JSON output
+
 donorSchema.set('toJSON', { virtuals: true });
 
-// Create geospatial index for location
+// Geospatial index for location
 donorSchema.index({ location: "2dsphere" });
 donorSchema.index({ status: 1 });
 

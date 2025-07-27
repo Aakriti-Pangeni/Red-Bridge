@@ -95,7 +95,9 @@ const Signup = () => {
       toast.success("User registered successfully!");
 
       // Redirect to homepage
-      window.location.href = "http://localhost:5173/";
+      // window.location.href = "http://localhost:5173/";
+
+      window.location.href = "http://localhost:5173/login";
     } catch (err) {
       console.error("Signup error:", err);
       toast.error("There was a problem registering.");

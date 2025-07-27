@@ -12,12 +12,12 @@ router.post('/contact', async (req, res) => {
     console.log('Subject:', subject);
     console.log('Message:', message);
     
-    // Validate required fields
+    
     if (!name || !subject || !message) {
       return res.status(400).json({ error: 'Name, subject, and message are required' });
     }
 
-    // Send email to RedBridge
+    
     try {
       await sendContactEmail({
         name,
@@ -25,10 +25,10 @@ router.post('/contact', async (req, res) => {
         message
       });
       
-      console.log('✅ Contact email sent successfully');
+      console.log(' Contact email sent successfully');
       res.json({ message: 'Message sent successfully! We will get back to you soon.' });
     } catch (emailError) {
-      console.error('❌ Failed to send contact email:', emailError);
+      console.error(' Failed to send contact email:', emailError);
       res.status(500).json({ error: 'Failed to send message. Please try again.' });
     }
     

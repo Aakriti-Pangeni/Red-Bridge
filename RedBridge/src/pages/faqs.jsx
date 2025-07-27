@@ -19,10 +19,7 @@ const faqs = [
     question: 'How often can I donate blood?',
     answer: 'You can usually donate blood every 3 months. However, this may vary depending on health conditions and local guidelines.'
   },
-  {
-    question: 'Can I cancel a blood request after sending it?',
-    answer: 'Yes, you can cancel a request from your dashboard under the “My Requests” section.'
-  },
+ 
   {
     question: 'How can I contact the developers or support?',
     answer: 'You can reach out via the “Contact Us” page or email support@redbridge.com for help.'

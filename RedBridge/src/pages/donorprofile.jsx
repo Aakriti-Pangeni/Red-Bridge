@@ -82,7 +82,7 @@ const DonorProfile = () => {
     );
   }
 
-  // ✅ Check for pending status
+  //  Check for pending status
   if (donorData && donorData.status === 'pending') {
     return (
       <MainLayout>
@@ -94,13 +94,13 @@ const DonorProfile = () => {
             <h2 className="text-2xl font-bold text-gray-800 mb-4">Registration Under Review</h2>
             <p className="text-gray-600 mb-6">
               Your donor registration is currently being reviewed by our admin team. 
-              You will be notified once your application has been processed.
+             
             </p>
             <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
               <p className="text-yellow-800 text-sm">
                 <strong>What happens next?</strong><br/>
                 • Admin will review your registration details<br/>
-                • You'll receive an email notification about the decision<br/>
+                {/* • You'll receive an email notification about the decision<br/> */}
                 • This usually takes 1-2 business days
               </p>
             </div>
@@ -125,7 +125,7 @@ const DonorProfile = () => {
     );
   }
 
-  // ✅ Check for rejected status
+  // Check for rejected status
   if (donorData && donorData.status === 'rejected') {
     return (
       <MainLayout>
@@ -166,7 +166,7 @@ const DonorProfile = () => {
     );
   }
 
-  // ✅ User hasn't registered as donor yet
+  // User hasn't registered as donor yet
   if (!donorData && userInfo) {
     return (
       <MainLayout>
@@ -199,7 +199,7 @@ const DonorProfile = () => {
     );
   }
 
-  // ✅ Error state
+  //  Error state
   if (error) {
     return (
       <MainLayout>
@@ -220,7 +220,7 @@ const DonorProfile = () => {
     );
   }
 
-  // ✅ Approved donor - show full profile (status === 'approved')
+  //  Approved donor - show full profile (status === 'approved')
   return (
     <MainLayout>
       <div className="max-w-4xl mt-25 min-h-screen mx-auto p-6">

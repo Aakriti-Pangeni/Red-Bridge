@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import axios from "axios";
 
-// Utility function to get cookie value by name
+
 const getCookie = (name) => {
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${name}=`);
@@ -16,7 +16,7 @@ const Welcome = () => {
   const [isDonor, setIsDonor] = useState(false);
   const [userId, setUserId] = useState(null);
 
-  // ✅ Get user ID from cookie (as used in DonorProfile)
+
   // useEffect(() => {
   //   const idFromCookie = getCookie("userInfo");
   //   let parsed = null;
@@ -40,20 +40,20 @@ useEffect(() => {
     parsed = null;
   }
   
-  console.log("Parsed userInfo in Welcome:", parsed); // Debug log
+  console.log("Parsed userInfo in Welcome:", parsed); 
   
-  // ✅ Check multiple possible ID fields
+  
   if (parsed && (parsed._id || parsed.id)) {
     const userId = parsed._id || parsed.id;
     setUserId(userId);
-    console.log("User ID found:", userId); // Debug log
+    console.log("User ID found:", userId); 
   } else {
-    console.log("No user ID found in cookie"); // Debug log
+    console.log("No user ID found in cookie");
   }
 }, []);
 
 
-  // ✅ Check if user is a registered donor
+ 
   useEffect(() => {
     const checkDonorStatus = async () => {
       try {

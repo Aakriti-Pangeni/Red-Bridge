@@ -27,7 +27,7 @@ const Footer = () => {
         </li>
         <li>
           <NavLink
-            to={"/support"}
+            to={"/contactus"}
             className="hover:text-black transition-colors"
           >
             Contact us

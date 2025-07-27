@@ -74,7 +74,7 @@ export const createDonor = async (req, res) => {
         coordinates,
       },
         lastDonation: req.body.lastDonation || null,
-      status: 'pending', // This ensures donors start as pending
+      status: 'pending', 
       donationCount: 0
     });
 
@@ -86,7 +86,7 @@ export const createDonor = async (req, res) => {
   }
 };
 
-// GET ALL DONORS (only approved)
+
 export const getAllDonors = async (req, res) => {
   try {
     const donors = await Donor.find({ status: 'approved' }).populate("user");
@@ -203,7 +203,6 @@ export const requestDonor = async (req, res) => {
     await sendSMS(donor.phone, smsMessage);
 
     // Email message
-    // const emailSubject = "Urgent Blood Donation Request";
     const emailHtml = `
       <p>Dear ${donor.name},</p>
       <p>${requesterName} is requesting <strong>${donor.bloodGroup}</strong> blood.</p>
@@ -216,7 +215,7 @@ export const requestDonor = async (req, res) => {
       donorName: donor.name,
       requesterName,
       requesterPhone,
-      emailHtml, // if your function accepts it directly
+      emailHtml, 
     });
 
     res.status(200).json({ message: "SMS and Email sent to donor!" });
@@ -271,17 +270,17 @@ export const getDonorByUserId = async (req, res) => {
   try {
     const { userId } = req.params;
     
-    console.log("Looking for donor with userId:", userId); // Debug log
+    console.log("Looking for donor with userId:", userId); 
     
     if (!userId || userId === 'undefined') {
       return res.status(400).json({ message: "Invalid user ID provided" });
     }
     
-    // Find donor by user reference
+   
     const donor = await Donor.findOne({ user: userId });
-    
-    console.log("Found donor:", donor); // Debug log
-    
+
+    console.log("Found donor:", donor);
+
     if (!donor) {
       return res.status(404).json({ message: "Donor profile not found for this user" });
     }
@@ -293,7 +292,7 @@ export const getDonorByUserId = async (req, res) => {
   }
 };
 
-// Admin functions for donor approval
+
 export const getPendingDonors = async (req, res) => {
   try {
     const pendingDonors = await Donor.find({ status: 'pending' })
