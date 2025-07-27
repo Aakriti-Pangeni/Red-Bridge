@@ -11,7 +11,7 @@ mongoose.connect(process.env.MONGO_URI)
 
 const createAdmin = async () => {
   try {
-    // Check if admin exists
+    
     const existingAdmin = await Admin.findOne({ email: 'adminrb123@gmail.com' });
     
     if (existingAdmin) {
@@ -19,7 +19,7 @@ const createAdmin = async () => {
       process.exit(0);
     }
 
-    // Create admin - use a simple password for testing
+   
     const hashedPassword = await bcrypt.hash('admin123', 10);
     
     const admin = new Admin({
@@ -29,13 +29,13 @@ const createAdmin = async () => {
     });
 
     await admin.save();
-    console.log('✅ Admin created successfully!');
-    console.log('📧 Email: adminrb123@gmail.com');
-    console.log('🔑 Password: admin123');
-    console.log('🌐 Login at: http://localhost:5173/login');
+    console.log(' Admin created successfully!');
+    console.log(' Email: adminrb123@gmail.com');
+    console.log(' Password: admin123');
+    console.log(' Login at: http://localhost:5173/login');
     process.exit(0);
   } catch (error) {
-    console.error('❌ Error creating admin:', error);
+    console.error(' Error creating admin:', error);
     process.exit(1);
   }
 };

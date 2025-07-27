@@ -9,7 +9,7 @@ const getCoordinates = async (address) => {
 
     const { results } = res.data;
 
-    // ✅ Check for null or empty results
+   
     if (!results || results.length === 0) {
       return null;
     }

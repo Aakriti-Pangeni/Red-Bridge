@@ -5,23 +5,23 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import Donor from './models/donor.model.js';
 import { faker } from '@faker-js/faker';
-import getCoordinates from './utils/geocode.js'; // ✅ Import your geocoding function
+import getCoordinates from './utils/geocode.js'; 
 
-// Load environment variables
+
 dotenv.config();
 
-// Connect to MongoDB
+
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 }).then(() => {
-  console.log('✅ MongoDB connected');
+  console.log(' MongoDB connected');
   seedDonors();
 }).catch((err) => {
-  console.error('❌ MongoDB connection error:', err);
+  console.error(' MongoDB connection error:', err);
 });
 
-// Nepali names and locations (keep existing arrays)
+
 const nepaliFirstNames = [
   'Sita', 'Rita', 'Maya', 'Gita', 'Sunita', 'Bimala',
   'Ram', 'Hari', 'Shyam', 'Bikash', 'Suman', 'Manish', 'Amit', 'Anil', 'Rajesh', 'Prakash', 'Ramesh', 'Ravi', 'Ajay', 'Sanjay', 'Deepak', 'Niraj', 'Binod', 'Suraj', 'Kamal', 'Ashok', 'Dinesh', 'Santosh', 'Pawan', 'Raju'
@@ -53,7 +53,7 @@ const nepaliPlaces = [
 
 const bloodGroups = ['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'];
 
-// ✅ Remove the random coordinates function - we'll use real geocoding
+
 
 function getNepaliFullName() {
   const firstName = faker.helpers.arrayElement(nepaliFirstNames);
@@ -79,15 +79,15 @@ function getDonationCount(index, totalDonors) {
 
 async function seedDonors() {
   try {
-    // Clear existing donors
+   
     await Donor.deleteMany({});
-    console.log('🗑️ Existing donors cleared.');
+    console.log(' Existing donors cleared.');
 
     const fakeUserId = new mongoose.Types.ObjectId();
     const donorArray = [];
-    const totalDonors = 80; // Reduced for faster processing
+    const totalDonors = 80;
 
-    console.log('🌍 Starting geocoding process...');
+    console.log(' Starting geocoding process...');
 
     for (let i = 0; i < totalDonors; i++) {
       const name = getNepaliFullName();
@@ -100,11 +100,11 @@ async function seedDonors() {
       const address = faker.helpers.arrayElement(nepaliPlaces);
       const lastDonation = getRandomLastDonation();
       
-      // ✅ Use real geocoding for coordinates
+      
       console.log(`📍 Geocoding ${i + 1}/${totalDonors}: ${address}`);
       const coords = await getCoordinates(address);
       
-      // ✅ Fallback to Kathmandu coordinates if geocoding fails
+      
       const finalCoords = coords || [85.3240, 27.7172]; // Kathmandu coordinates
       
       const donationCount = getDonationCount(i, totalDonors);
@@ -121,15 +121,14 @@ async function seedDonors() {
         donationCount,
         location: {
           type: 'Point',
-          coordinates: finalCoords // ✅ Real coordinates from geocoding
+          coordinates: finalCoords 
         },
         user: fakeUserId,
         status: 'approved'
       });
 
-      // ✅ Add delay to avoid rate limiting
       if (i % 5 === 0) {
-        console.log(`⏳ Pausing for rate limiting...`);
+        console.log(` Pausing for rate limiting...`);
         await new Promise(resolve => setTimeout(resolve, 1000));
       }
     }
@@ -139,19 +138,19 @@ async function seedDonors() {
     const verifiedCount = donorArray.filter(donor => donor.donationCount >= 2).length;
     const regularCount = donorArray.filter(donor => donor.donationCount < 2).length;
     
-    console.log(`✅ ${totalDonors} Nepali donors inserted with REAL coordinates.`);
-    console.log(`📊 ${verifiedCount} verified donors (donationCount >= 2)`);
-    console.log(`📊 ${regularCount} regular donors (donationCount < 2)`);
+    console.log(` ${totalDonors} Nepali donors inserted with REAL coordinates.`);
+    console.log(` ${verifiedCount} verified donors (donationCount >= 2)`);
+    console.log(` ${regularCount} regular donors (donationCount < 2)`);
     
-    // ✅ Show sample coordinates for verification
-    console.log('📍 Sample coordinates verification:');
+   
+    console.log(' Sample coordinates verification:');
     donorArray.slice(0, 5).forEach(d => {
       console.log(`   ${d.address}: [${d.location.coordinates[0]}, ${d.location.coordinates[1]}]`);
     });
     
     process.exit(0);
   } catch (error) {
-    console.error('❌ Error seeding donors:', error);
+    console.error(' Error seeding donors:', error);
     process.exit(1);
   }
 }

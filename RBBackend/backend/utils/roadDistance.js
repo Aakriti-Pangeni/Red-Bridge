@@ -9,7 +9,7 @@ const getRoadDistance = async (lat1, lon1, lat2, lon2) => {
 
     const osrmUrl = `http://router.project-osrm.org/route/v1/driving/${lon1},${lat1};${lon2},${lat2}?overview=false`;
     
-    console.log('🌍 Making OSRM request:', osrmUrl);
+    console.log(' Making OSRM request:', osrmUrl);
     
     const response = await fetch(osrmUrl, {
       method: 'GET',
@@ -18,14 +18,14 @@ const getRoadDistance = async (lat1, lon1, lat2, lon2) => {
       }
     });
     
-    console.log('📡 OSRM Response status:', response.status);
+    console.log(' OSRM Response status:', response.status);
     
     if (!response.ok) {
       throw new Error(`OSRM HTTP error! status: ${response.status}`);
     }
     
     const data = await response.json();
-    console.log('✅ OSRM Response received');
+    console.log(' OSRM Response received');
     
     if (data.routes && data.routes[0]) {
       const distanceInKm = data.routes[0].distance / 1000;
@@ -41,7 +41,7 @@ const getRoadDistance = async (lat1, lon1, lat2, lon2) => {
     
     return { success: false, error: 'No route found' };
   } catch (error) {
-    console.error('❌ Road distance error:', error.message);
+    console.error(' Road distance error:', error.message);
     return { success: false, error: error.message };
   }
 };

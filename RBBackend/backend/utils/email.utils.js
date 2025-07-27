@@ -3,9 +3,9 @@ import User from '../models/user.model.js';
 import { requestDonor } from "../controllers/donor.controller.js";
 import middleware from "../middleware/auth.middleware.js";
 
-// Configure nodemailer transporter
+
 const transporter = nodemailer.createTransport({
-    service: 'gmail', // or your email service
+    service: 'gmail', 
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
@@ -112,7 +112,7 @@ export const sendDonationConfirmationEmail = async (donationDetails) => {
     }
 };
 
-// Send OTP for password reset
+
 export const sendPasswordResetOTP = async (options) => {
     try {
         const mailOptions = {
@@ -224,7 +224,7 @@ export const sendBloodRequestNotification = async (options) => {
     }
 };
 
-// ✅ Update this function (replace the existing sendDonorRequestEmail function)
+
 export const sendDonorRequestEmail = async ({ 
   donorEmail, 
   donorName, 
@@ -275,7 +275,7 @@ export const sendDonorRequestEmail = async ({
 
             <div style="text-align: center; margin: 30px 0;">
               <a href="tel:${requesterPhone}" style="background-color: #dc2626; color: white; padding: 15px 30px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block;">
-                📞 Call ${requesterName}
+                 Call ${requesterName}
               </a>
             </div>
 
@@ -295,10 +295,77 @@ export const sendDonorRequestEmail = async ({
     };
 
     const info = await transporter.sendMail(mailOptions);
-    console.log(`✅ Email sent successfully to ${donorEmail}. MessageId: ${info.messageId}`);
+    console.log(` Email sent successfully to ${donorEmail}. MessageId: ${info.messageId}`);
     return info;
   } catch (error) {
-    console.error('❌ Error sending donor request email:', error);
+    console.error(' Error sending donor request email:', error);
+    throw error;
+  }
+};
+
+
+
+// Add this function to your existing email.utils.js file
+export const sendContactEmail = async ({ name, subject, message }) => {
+  try {
+    console.log('=== CONTACT EMAIL SENDING ===');
+    console.log('Sending to: redbridge321@gmail.com');
+    
+    const mailOptions = {
+      from: `"RedBridge Contact Form" <${process.env.EMAIL_USER}>`,
+      to: 'redbridge321@gmail.com', // ✅ Your target email
+      subject: ` RedBridge Contact: ${subject}`,
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f9f9;">
+          <div style="background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+            <div style="text-align: center; margin-bottom: 30px; border-bottom: 2px solid #dc2626; padding-bottom: 20px;">
+              <h1 style="color: #dc2626; margin: 0;"> RedBridge Contact Form</h1>
+              <p style="color: #666; margin: 5px 0;">New message from website</p>
+            </div>
+
+            <div style="background-color: #fee2e2; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #dc2626;">
+              <h2 style="color: #dc2626; margin-top: 0;"> Contact Details</h2>
+              
+              <div style="margin: 15px 0;">
+                <strong style="color: #333;">Name:</strong> 
+                <span style="color: #666; margin-left: 10px;">${name}</span>
+              </div>
+              
+              <div style="margin: 15px 0;">
+                <strong style="color: #333;">Subject:</strong> 
+                <span style="color: #666; margin-left: 10px;">${subject}</span>
+              </div>
+            </div>
+
+            <div style="background-color: #f3f4f6; padding: 20px; border-radius: 8px; margin: 20px 0;">
+              <h3 style="margin-top: 0; color: #333;"> Message:</h3>
+              <div style="background-color: white; padding: 15px; border-radius: 5px; border-left: 3px solid #dc2626;">
+                <p style="color: #4b5563; line-height: 1.6; margin: 0; white-space: pre-wrap;">${message}</p>
+              </div>
+            </div>
+            
+            <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; text-align: center;">
+              <p style="color: #999; font-size: 14px;">
+                Received: ${new Date().toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                  hour: '2-digit',
+                  minute: '2-digit'
+                })}<br/>
+                <em>RedBridge Blood Bank Management System</em>
+              </p>
+            </div>
+          </div>
+        </div>
+      `,
+    };
+
+    const info = await transporter.sendMail(mailOptions);
+    console.log(` Contact email sent successfully to redbridge321@gmail.com. MessageId: ${info.messageId}`);
+    return info;
+  } catch (error) {
+    console.error(' Error sending contact email:', error);
     throw error;
   }
 };

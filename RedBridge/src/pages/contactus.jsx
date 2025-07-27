@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import MainLayout from '../shared/sidebar/mainlayout';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLocationDot, faPhone, faEnvelope } from '@fortawesome/free-solid-svg-icons';
+import { ToastContainer, toast } from 'react-toastify';
 
 const ContactUs = () => {
   const [formData, setFormData] = useState({
@@ -21,25 +22,49 @@ const ContactUs = () => {
     }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
+// Replace the handleSubmit function in your contactus.jsx
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  
+  if (!formData.name || !formData.subject || !formData.message) {
+    setErrors({ submit: 'Name, subject, and message are required' });
+    return;
+  }
 
-    try {
-      await new Promise((res) => setTimeout(res, 1500));
-      alert("Message sent successfully!");
+  setIsSubmitting(true);
+  setErrors({});
+
+  try {
+    console.log('Sending contact form:', formData);
+
+    const response = await fetch('http://localhost:4000/api/contact', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+    });
+
+    const result = await response.json();
+
+    if (response.ok) {
+      toast.success('Message sent successfully! We will get back to you soon.');
       setFormData({
         name: '',
         subject: '',
         message: '',
       });
       setErrors({});
-    } catch (err) {
-      setErrors({ submit: 'An unexpected error occurred' });
-    } finally {
-      setIsSubmitting(false);
+    } else {
+      setErrors({ submit: result.error || 'Failed to send message' });
     }
-  };
+  } catch (error) {
+    console.error('Contact form error:', error);
+    setErrors({ submit: 'Failed to send message. Please try again.' });
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   return (
     <MainLayout>
@@ -119,11 +144,14 @@ const ContactUs = () => {
 
           <div>
             <FontAwesomeIcon icon={faEnvelope} className="text-red-700 mr-3" />
-            redbridgemail03@gmail.com
+            redbridgemail321@gmail.com
           </div>
         </div>
       </section>
+      <ToastContainer/>
     </MainLayout>
+    
+   
   );
 };
 
